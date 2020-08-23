@@ -9,27 +9,24 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-sm navbar-light bg-light">
-		<a class="navbar-brand" href="#">NavBar</a>
+		<a class="navbar-brand" href="#">Library Management System</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
 		<div id="navbarSupportedContent" class="collapse navbar-collapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+				<li class="nav-item {% if currentNav == 'index' %}active{% endif %}">
+					<a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
 				</li>
-				<li class="nav-item">
+				<li class="nav-item {% if currentNav == 'books' %}active{% endif %}">
 					<a class="nav-link" href="{% url 'books' %}">Books</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Link2</a>
 				</li>
 			</ul>
 		</div>
 	</nav>
 	<div>
-		<h1>Library Management System</h1>
+		<h1>{% block maintitle %}Library Management System{% endblock %}</h1>
 		{% block content %}
 		{% endblock %}
 	</div>
