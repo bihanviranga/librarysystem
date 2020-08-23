@@ -1,0 +1,42 @@
+[
+	{
+		"model": "librarycore.Book",
+		"pk": 1,
+		"fields":{
+			"bookName": "The Simarillion",
+			"bookAuthor": "J R R Tolkien"
+		}
+	},
+	{
+		"model": "librarycore.Book",
+		"pk": 2,
+		"fields":{
+			"bookName": "Song of Myself",
+			"bookAuthor": "Walter Whitman"
+		}
+	},
+	{
+		"model": "librarycore.Book",
+		"pk": 3,
+		"fields":{
+			"bookName": "The Satanic Verses",
+			"bookAuthor": "Salman Rushdie"
+		}
+	},
+	{
+		"model": "librarycore.Book",
+		"pk": 4,
+		"fields":{
+			"bookName": "Leonardo Da Vinci",
+			"bookAuthor": "Walter Isaacson"
+		}
+	},
+	{
+		"model": "librarycore.Book",
+		"pk": 5,
+		"fields":{
+			"bookName": "The Da Vinci Code",
+			"bookAuthor": "Dan Brown"
+		}
+	}
+]
