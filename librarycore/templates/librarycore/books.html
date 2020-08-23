@@ -1,8 +1,18 @@
 {% extends 'librarycore/index.html' %}
 
 {% block maintitle %}Books page{% endblock %}
+
 {% block content %}
+<div class="container">
 	{% for book in books %}
-		<p>{{book.bookName}}, {{book.bookAuthor}}</p>
+	<div class="row">
+		<div class="col">
+			<p>{{book.bookName}}</p>
+		</div>
+		<div class="col">
+			<p>{{book.bookAuthor}}</p>
+		</div>
+	</div>
 	{% endfor %}
+</div>
 {% endblock %}
