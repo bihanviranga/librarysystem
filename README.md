@@ -2,5 +2,8 @@
 
 ## Roadmap
 - [X] Display a list of books.
-- [ ] Look into class-based views.
-- [ ] Add new books.
+- [X] Look into class-based views.
+- [X] Add new books.
+- [ ] View book details.
+- [ ] Delete books.
+- [ ] Edit book details.
