@@ -21,4 +21,4 @@ class Books(View):
 
 class BooksDelete(DeleteView):
     model = models.Book
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('books')
