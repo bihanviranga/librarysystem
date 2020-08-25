@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, DetailView
 from django.urls import reverse_lazy
 from . import models
 
@@ -19,6 +19,9 @@ class Books(View):
         books = models.Book.objects.all()
         return render(request, "librarycore/books.html", context={"currentNav": "books", "books":books})
 
-class BooksDelete(DeleteView):
+class BookDelete(DeleteView):
     model = models.Book
     success_url = reverse_lazy('books')
+
+class BookDetail(DetailView):
+    model = models.Book

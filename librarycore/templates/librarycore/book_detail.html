@@ -1,0 +1,10 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}{{book.bookName}} - Details{% endblock %}
+
+{% block content %}
+<div class="container">
+	<p>{{book.bookName}}</p>
+	<p>{{book.bookAuthor}}</p>
+</div>
+{% endblock %}

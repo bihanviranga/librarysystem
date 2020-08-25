@@ -22,13 +22,13 @@
 	{% for book in books %}
 	<div class="row">
 		<div class="col">
-			<p>{{book.bookName}}</p>
+			<a href="{% url 'book-detail' book.id %}">{{book.bookName}}</a>
 		</div>
 		<div class="col">
 			<p>{{book.bookAuthor}}</p>
 		</div>
 		<div class="col">
-			<a class="btn btn-danger" href="{% url 'delete-book' book.id %}">Delete</a>
+			<a class="btn btn-danger" href="{% url 'book-delete' book.id %}">Delete</a>
 		</div>
 	</div>
 	{% endfor %}
