@@ -14,3 +14,9 @@ class Books(View):
         books = models.Book.objects.all()
         return render(request, "librarycore/books.html", context={"currentNav": "books", "books":books})
 
+    def post(self, request):
+        bookName = request.POST['bookName']
+        authorName = request.POST['authorName']
+        models.Book.objects.create(bookName=bookName, bookAuthor=authorName)
+        books = models.Book.objects.all()
+        return render(request, "librarycore/books.html", context={"currentNav": "books", "books":books})
