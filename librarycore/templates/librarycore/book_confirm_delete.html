@@ -1,0 +1,9 @@
+{% extends 'librarycore/index.html' %} {% block maintitle %}Delete
+book?{%endblock %} {% block content %}
+<div class="container">
+  <form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Confirm" />
+  </form>
+</div>
+{% endblock %}

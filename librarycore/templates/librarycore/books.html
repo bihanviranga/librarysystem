@@ -27,6 +27,9 @@
 		<div class="col">
 			<p>{{book.bookAuthor}}</p>
 		</div>
+		<div class="col">
+			<a class="btn btn-danger" href="{% url 'delete-book' book.id %}">Delete</a>
+		</div>
 	</div>
 	{% endfor %}
 </div>
