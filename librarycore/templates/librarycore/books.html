@@ -3,6 +3,20 @@
 {% block maintitle %}Books page{% endblock %}
 
 {% block content %}
+<div class="container" style="margin-bottom: 2em;">
+	<div class="row">
+		<div class="col-1">
+			<button class="btn btn-success" id="btnBookNewShow" onclick="bookNewToggle()">New</button>
+		</div>
+		<div class="col">
+			<form action="{% url 'books' %}" method="POST">
+				<input type="text" name="bookName" id="txtBookName" hidden="true" placeholder="Book Name" />
+				<input type="text" name="authorName" id="txtAuthorName" hidden="true" placeholder="Author Name" />
+				<button class="btn btn-success" type="submit" id="btnBookSubmit" hidden="true">Add</button>
+			</form>
+		</div>
+	</div>
+</div>
 <div class="container">
 	{% for book in books %}
 	<div class="row">
@@ -15,4 +29,15 @@
 	</div>
 	{% endfor %}
 </div>
+
+<script>
+	function bookNewToggle() {
+		$("#btnBookNewShow").attr("hidden", true);
+		$("#btnBookSubmit").attr("hidden", false);
+		$("#txtBookName").attr("hidden", false);
+		$("#txtAuthorName").attr("hidden", false);
+		$("#txtBookName").focus();
+	}
+</script>
+
 {% endblock %}
