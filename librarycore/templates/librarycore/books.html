@@ -29,6 +29,7 @@
 		</div>
 		<div class="col">
 			<a class="btn btn-danger" href="{% url 'book-delete' book.id %}">Delete</a>
+			<a class="btn btn-secondary" href="{% url 'book-update' book.id %}">Update</a>
 		</div>
 	</div>
 	{% endfor %}

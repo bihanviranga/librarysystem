@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import DeleteView, DetailView
+from django.views.generic import DeleteView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from . import models
 
@@ -25,3 +25,8 @@ class BookDelete(DeleteView):
 
 class BookDetail(DetailView):
     model = models.Book
+
+class BookUpdate(UpdateView):
+    model = models.Book
+    success_url = reverse_lazy('books')
+    fields = ['bookName', 'bookAuthor']

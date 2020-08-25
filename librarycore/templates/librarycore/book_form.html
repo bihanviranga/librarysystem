@@ -1,0 +1,18 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}Editing {{book.bookName}}{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top:2em;">
+	<form method="post">
+		{% csrf_token %}
+		{% for field in form %}
+		<div class="row" style="margin-bottom: 1em;">
+			{{field.errors}}
+			{{field.label_tag}}{{field}}
+		</div>
+		{% endfor %}
+		<input type="submit" value="Submit" class="btn btn-success" />
+	</form>
+</div>
+{% endblock %}
