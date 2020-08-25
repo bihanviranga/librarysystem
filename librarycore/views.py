@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import View
-from django.views.generic import DeleteView, DetailView, UpdateView
+from django.views.generic import DeleteView, DetailView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from . import models
 
@@ -30,3 +30,7 @@ class BookUpdate(UpdateView):
     model = models.Book
     success_url = reverse_lazy('books')
     fields = ['bookName', 'bookAuthor']
+
+class BooksCreate(CreateView):
+    model = models.Book
+    fields = '__all__'
