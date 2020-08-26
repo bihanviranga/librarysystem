@@ -9,6 +9,19 @@
 </div>
 
 <div class="container">
+	<a class="btn btn-success" id="btnInstanceNewShow" onclick="instanceNewToggle()">New instance</a>
+	<form method="post" id="formNewInstance" hidden="true" action="{% url 'instance-create' %}">
+		{% csrf_token %}
+		<input type="hidden" name="bookId" value="{{book.id}}">
+		<select name="instanceType">
+			{% for it1, it2 in instanceTypes %}
+			<option value="{{it1}}">{{it2}}</option>
+			{% endfor %}
+		</select>
+		<button class="btn btn-success">Create</button>
+</div>
+
+<div class="container">
 	{% if instances.count == 0 %}
 	<p>No copies available</p>
 	{% else %}
@@ -25,4 +38,12 @@
 	{% endfor %}
 	{% endif %}
 </div>
+
+<script>
+	function instanceNewToggle() {
+		$("#btnInstanceNewShow").attr("hidden", true);
+		$("#formNewInstance").attr("hidden", false);
+	}
+</script>
+
 {% endblock %}

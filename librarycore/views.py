@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import DeleteView, DetailView, UpdateView, CreateView
 from django.urls import reverse_lazy
@@ -32,6 +32,8 @@ class BookDetail(DetailView):
         book = self.get_object()
         bookInstances = models.BookInstance.objects.filter(instanceBook=book)
         context['instances'] = bookInstances
+        bookInstanceTypes = models.BookInstance.INSTANCE_TYPE_CHOICES
+        context['instanceTypes'] = bookInstanceTypes
         return context
 
 class BookUpdate(UpdateView):
@@ -42,3 +44,11 @@ class BookUpdate(UpdateView):
 class BooksCreate(CreateView):
     model = models.Book
     fields = '__all__'
+
+class BookInstanceCreate(View):
+    def post(self, request):
+        instanceType = request.POST['instanceType']
+        bookId = request.POST['bookId']
+        book = models.Book.objects.get(pk=bookId)
+        models.BookInstance.objects.create(instanceBook=book, instanceType=instanceType)
+        return redirect('book-detail', bookId)
