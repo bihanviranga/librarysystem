@@ -12,4 +12,5 @@ urlpatterns = [
 
     path('bookinstances/new', views.BookInstanceCreate.as_view(), name='instance-create'),
     path('bookinstances/<str:pk>', views.BookInstanceDetail.as_view(), name='instance-detail'),
+    path('bookinstances/<str:pk>/delete', views.BookInstanceDelete.as_view(), name='instance-delete'),
 ]

@@ -7,4 +7,8 @@
 	<p>{{bookInstance.instanceSerialNum}}</p>
 	<p>{{bookInstance.instanceType}}</p>
 </div>
+
+<div class="container">
+	<a class="btn btn-danger" href="{% url 'instance-delete' bookInstance.instanceSerialNum %}">Delete</a>
+</div>
 {% endblock %}

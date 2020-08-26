@@ -9,6 +9,6 @@
 - [X] Edit book details.
 - [X] View list of book instances in book detail page.
 - [X] Add book instances
-- [ ] View specific book instance.
-- [ ] Remove book instances
+- [X] View specific book instance.
+- [X] Remove book instances
 - [ ] Edit instance types

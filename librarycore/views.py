@@ -56,3 +56,8 @@ class BookInstanceCreate(View):
 class BookInstanceDetail(DetailView):
     model = models.BookInstance
     context_object_name = "bookInstance"
+
+class BookInstanceDelete(DeleteView):
+    model = models.BookInstance
+    context_object_name = "bookInstance"
+    success_url = reverse_lazy('books')
