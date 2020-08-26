@@ -1,0 +1,10 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}{{bookInstance.instanceBook.bookName}} - Instance{%endblock %}
+
+{% block content %}
+<div class="container">
+	<p>{{bookInstance.instanceSerialNum}}</p>
+	<p>{{bookInstance.instanceType}}</p>
+</div>
+{% endblock %}

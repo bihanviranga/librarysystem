@@ -29,7 +29,7 @@
 	{% for instance in instances %}
 	<div class="row">
 		<div class="col">
-			{{instance.instanceSerialNum}}
+			<a href="{% url 'instance-detail' instance.instanceSerialNum %}">{{instance.instanceSerialNum}}</a>
 		</div>
 		<div class="col">
 			{{instance.instanceType}}
@@ -41,9 +41,7 @@
 
 <script>
 	function instanceNewToggle() {
-		$("#btnInstanceNewShow").attr("hidden", true);
-		$("#formNewInstance").attr("hidden", false);
-	}
-</script>
+		$(" #btnInstanceNewShow").attr("hidden", true); $("#formNewInstance").attr("hidden", false);
+	} </script>
 
 {% endblock %}

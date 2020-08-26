@@ -52,3 +52,7 @@ class BookInstanceCreate(View):
         book = models.Book.objects.get(pk=bookId)
         models.BookInstance.objects.create(instanceBook=book, instanceType=instanceType)
         return redirect('book-detail', bookId)
+
+class BookInstanceDetail(DetailView):
+    model = models.BookInstance
+    context_object_name = "bookInstance"
