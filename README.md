@@ -6,4 +6,4 @@
 - [X] Add new books.
 - [X] View book details.
 - [X] Delete books.
-- [ ] Edit book details.
+- [X] Edit book details.
