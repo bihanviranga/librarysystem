@@ -4,7 +4,25 @@
 
 {% block content %}
 <div class="container">
-	<p>{{book.bookName}}</p>
-	<p>{{book.bookAuthor}}</p>
+	<p>Title: {{book.bookName}}</p>
+	<p>Author: {{book.bookAuthor}}</p>
+</div>
+
+<div class="container">
+	{% if instances.count == 0 %}
+	<p>No copies available</p>
+	{% else %}
+	<h2>{{instances.count}} copies of {{book.bookName}}</h2>
+	{% for instance in instances %}
+	<div class="row">
+		<div class="col">
+			{{instance.instanceSerialNum}}
+		</div>
+		<div class="col">
+			{{instance.instanceType}}
+		</div>
+	</div>
+	{% endfor %}
+	{% endif %}
 </div>
 {% endblock %}

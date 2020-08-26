@@ -38,5 +38,29 @@
 			"bookName": "The Da Vinci Code",
 			"bookAuthor": "Dan Brown"
 		}
+	},
+	{
+		"model": "librarycore.BookInstance",
+		"pk": "d58c01cc-e731-4ecf-b7b0-e6c28e885d00",
+		"fields":{
+			"instanceBook": 5,
+			"instanceType": "PB"
+		}
+	},
+	{
+		"model": "librarycore.BookInstance",
+		"pk": "24f1b47c-539b-47cc-a09d-2a889b99a0b9",
+		"fields":{
+			"instanceBook": 5,
+			"instanceType": "AB"
+		}
+	},
+	{
+		"model": "librarycore.BookInstance",
+		"pk": "a821b4ad-4ba3-4c9e-a1c2-0f5cb4feb793",
+		"fields":{
+			"instanceBook": 5,
+			"instanceType": "EB"
+		}
 	}
 ]

@@ -26,6 +26,14 @@ class BookDelete(DeleteView):
 class BookDetail(DetailView):
     model = models.Book
 
+    # pass book instances as well by overriding this method
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = self.get_object()
+        bookInstances = models.BookInstance.objects.filter(instanceBook=book)
+        context['instances'] = bookInstances
+        return context
+
 class BookUpdate(UpdateView):
     model = models.Book
     success_url = reverse_lazy('books')
