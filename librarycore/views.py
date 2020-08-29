@@ -42,6 +42,7 @@ class BookUpdate(UpdateView):
 
 class BooksCreate(CreateView):
     model = models.Book
+    success_url = reverse_lazy('books')
     fields = '__all__'
 
 class BookInstanceCreate(View):
