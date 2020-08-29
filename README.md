@@ -11,4 +11,4 @@
 - [X] Add book instances
 - [X] View specific book instance.
 - [X] Remove book instances
-- [ ] Edit instance types
+- [X] Edit instance types

@@ -57,7 +57,23 @@ class BookInstanceDetail(DetailView):
     model = models.BookInstance
     context_object_name = "bookInstance"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        bookInstanceTypes = models.BookInstance.INSTANCE_TYPE_CHOICES
+        context['instanceTypes'] = bookInstanceTypes
+        return context
+
 class BookInstanceDelete(DeleteView):
     model = models.BookInstance
     context_object_name = "bookInstance"
     success_url = reverse_lazy('books')
+
+class BookInstanceUpdate(View):
+    def post(self, request, pk):
+        instanceSerialNum = request.POST['instanceSerialNum']
+        instanceType = request.POST['instanceType']
+        instance = models.BookInstance.objects.get(pk=instanceSerialNum)
+        instance.instanceType = instanceType
+        instance.save()
+        return redirect('instance-detail', instanceSerialNum)
+
