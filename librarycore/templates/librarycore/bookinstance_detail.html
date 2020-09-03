@@ -15,9 +15,9 @@
 
 <div class="container">
 	<form action="{% url 'instance-update' bookInstance.instanceSerialNum %}" method="POST" id="updateInstance"
-		hidden="true">
+		hidden="true" class="form-inline">
 		{% csrf_token %}
-		<select name="instanceType">
+		<select name="instanceType" class="form-control custom-select" style="margin: 0 1em;">
 			{% for insType, insTypeName in instanceTypes %}
 			{% if insType == bookInstance.instanceType %}
 			<option value="{{insType}}" selected>{{insTypeName}}</option>
@@ -27,7 +27,8 @@
 			{% endfor %}
 		</select>
 		<input type="hidden" name="instanceSerialNum" value="{{bookInstance.instanceSerialNum}}">
-		<button class="btn btn-primary">Edit</button>
+		<br>
+		<button class="btn btn-primary form-control">Edit</button>
 	</form>
 </div>
 
