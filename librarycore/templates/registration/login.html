@@ -9,7 +9,9 @@ Login
 	<form method="POST">
 		{% csrf_token %}
 		{{ form }}
+		{% if not next %}
 		<input type="hidden" name="next" value="{% url 'index' %}">
+		{% endif %}
 		<button class="btn btn-primary">Login</button>
 	</form>
 </div>
