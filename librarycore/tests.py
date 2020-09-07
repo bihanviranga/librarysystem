@@ -39,7 +39,7 @@ class BookViewTests(TestCase):
 
     def test_createBookPostRequest(self):
         url = reverse('book-create')
-        postDict = {'bookName': 'testingBook', 'bookAuthor':'testingAuthor'}
+        postDict = {'bookName': 'testingBook', 'bookAuthor':'testingAuthor', 'bookDescription':'testingDescription'}
         response = self.client.post(url, postDict)
         bookFromDb = models.Book.objects.all()[0]
         self.assertEqual(bookFromDb.bookName, postDict['bookName'])
