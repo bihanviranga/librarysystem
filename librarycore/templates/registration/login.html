@@ -1,0 +1,16 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}
+Login
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<form method="POST">
+		{% csrf_token %}
+		{{ form }}
+		<input type="hidden" name="next" value="{% url 'index' %}">
+		<button class="btn btn-primary">Login</button>
+	</form>
+</div>
+{% endblock %}

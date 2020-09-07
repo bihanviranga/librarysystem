@@ -1,8 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 import librarycore.views as views
 
 urlpatterns = [
     path('', views.index, name='index'),
+
+    path('accounts/', include('django.contrib.auth.urls')),
 
     path('books', views.Books.as_view(), name='books'),
     path('books/new', views.BooksCreate.as_view(), name='book-create'),
