@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import DeleteView, DetailView, UpdateView, CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 from . import models
 
 def index(request):
@@ -76,4 +77,26 @@ class BookInstanceUpdate(View):
         instance.instanceType = instanceType
         instance.save()
         return redirect('instance-detail', instanceSerialNum)
+
+class UserSignup(View):
+    def get(self, request, **kwargs):
+        return render(request,"registration/signup.html")
+
+    def post(self, request):
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        if User.objects.filter(username=username).exists():
+            return render(request, 'registration/signup.html', {'signup_error':'Username exists'})
+        elif User.objects.filter(email=email).exists():
+            return render(request, 'registration/signup.html', {'signup_error':'Email exists'})
+        else:
+            user = User.objects.create_user(username, email, password)
+            # redirect to login with a msg
+            return redirect('login')
+
+class UserDetail(View):
+    def get(self, request, username):
+        user = User.objects.get(username=username)
+        return render(request, "user/profile.html")
 
