@@ -3,6 +3,7 @@
 ## Roadmap
 
 ### Todo
+- [ ] Admins can see a list of normal users.
 - [ ] Testcases for views
 - [ ] Admin users who can CRUD books and instances
 - [ ] Normal users who can view books and instances
@@ -11,6 +12,7 @@
 - [ ] Normal users can see only whether it is borrowed or not.
 
 ### Done
+- [X] Authentication features
 - [X] Edit instance types
 - [X] Remove book instances
 - [X] View specific book instance.
