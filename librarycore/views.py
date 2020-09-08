@@ -95,3 +95,8 @@ class UserSignup(View):
             # redirect to login with a msg
             return redirect('login')
 
+class UserDetail(View):
+    def get(self, request, username):
+        user = User.objects.get(username=username)
+        return render(request, "user/profile.html")
+
