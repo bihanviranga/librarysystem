@@ -1,0 +1,21 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}
+Sign Up
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	{% if signup_error %}
+	<p class="danger">{{signup_error}}</p>
+	{% endif %}
+
+	<form method="POST">
+		{% csrf_token %}
+		<input type="text" name="username" placeholder="Username" />
+		<input type="email" name="email" placeholder="Email address" />
+		<input type="password" name="password" placeholder="Password" />
+		<button class="btn btn-primary">Sign up</button>
+	</form>
+</div>
+{% endblock %}
