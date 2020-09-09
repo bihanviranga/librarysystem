@@ -8,6 +8,13 @@
 <div class="container">
 	<p>Username: {{user.username}}</p>
 	<p>Email: {{user.email}}</p>
-	<p>User type: {{user.groups}}</p>
+	{% if user.groups.all %}
+	<p>Groups:</p>
+	<ul>
+		{% for group in user.groups.all %}
+		<li>{{ group }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
 </div>
 {% endblock %}
