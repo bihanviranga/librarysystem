@@ -2,6 +2,7 @@ import random
 from django.test import TestCase
 from django.test.utils import setup_test_environment
 from django.urls import reverse
+from django.contrib.auth.models import User, Group
 from librarycore import models
 
 # TODO: Test NotFound errors in GET and DELETE and UPDATE
@@ -23,6 +24,13 @@ def getBookInstances(count, book):
         instance = models.BookInstance.objects.create(instanceBook=instanceBook, instanceType=instanceType)
         bookInstances.append(instance)
     return bookInstances
+
+def getUser(n, admin=False):
+    user = User.objects.create_user(f'testingUser{n}', f'testingUser{n}@email.com', f'testingUser{n}')
+    if admin:
+        group = Group.objects.get_or_create(name='library_admins')[0]
+        user.groups.add(group)
+    return user
 
 class GeneralSiteTests(TestCase):
     def setup(self):
@@ -93,3 +101,28 @@ class BookInstanceViewTests(TestCase):
         url = reverse('instance-detail', args=[instance.instanceSerialNum])
         response = self.client.get(url)
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
+
+class UserTests(TestCase):
+    def setup(self):
+        setup_test_environment()
+
+    def test_accessUsersPageAsNormalUser(self):
+        user = getUser(1, False)
+        # TODO: make the user log in
+        url = reverse('users')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 401)
+
+    def test_accessUsersPageWithoutLogin(self):
+        url = reverse('users')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        # TODO: check if the redirect URL is there in the response
+
+    def test_accessUsersPageAsAdmin(self):
+        admin = getUser(1, True)
+        # TODO: make the admin log in
+        url = reverse('users')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+

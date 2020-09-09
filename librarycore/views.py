@@ -3,6 +3,7 @@ from django.views import View
 from django.views.generic import DeleteView, DetailView, UpdateView, CreateView, ListView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import UserPassesTestMixin
 from . import models
 
 def index(request):
@@ -100,9 +101,12 @@ class UserDetail(View):
         user = User.objects.get(username=username)
         return render(request, "user/profile.html")
 
-class UserList(ListView):
+class UserList(UserPassesTestMixin, ListView):
     model = User
     template_name = 'user/user_list.html'
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='library_admins').exists()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
