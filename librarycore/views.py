@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import DeleteView, DetailView, UpdateView, CreateView
+from django.views.generic import DeleteView, DetailView, UpdateView, CreateView, ListView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from . import models
@@ -99,4 +99,13 @@ class UserDetail(View):
     def get(self, request, username):
         user = User.objects.get(username=username)
         return render(request, "user/profile.html")
+
+class UserList(ListView):
+    model = User
+    template_name = 'user/user_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['currentNav'] = 'users'
+        return context
 

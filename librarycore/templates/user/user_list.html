@@ -1,0 +1,27 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}
+User list
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	{% for cUser in user_list %}
+	<div class="row">
+		<div class="col">
+			<a href="{% url 'profile' cUser.username %}">{{ cUser.username }}</a>
+		</div>
+		<div class="col">
+			{{ cUser.email }}
+		</div>
+		<div class="col">
+			{% for group in cUser.groups.all %}
+			{% if group.name == 'library_admins' %}
+			admin
+			{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}
