@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import UserPassesTestMixin
 from . import models
+from .mixins import UserIsAdminMixin
 
 def index(request):
     return render(request, "librarycore/index.html", context={"currentNav": "index"})
@@ -19,7 +20,7 @@ class Books(ListView):
         context['currentNav'] = 'books'
         return context
 
-class BookDelete(DeleteView):
+class BookDelete(UserIsAdminMixin, DeleteView):
     model = models.Book
     success_url = reverse_lazy('books')
 
@@ -36,17 +37,17 @@ class BookDetail(DetailView):
         context['instanceTypes'] = bookInstanceTypes
         return context
 
-class BookUpdate(UpdateView):
+class BookUpdate(UserIsAdminMixin, UpdateView):
     model = models.Book
     success_url = reverse_lazy('books')
     fields = '__all__'
 
-class BooksCreate(CreateView):
+class BooksCreate(UserIsAdminMixin, CreateView):
     model = models.Book
     success_url = reverse_lazy('books')
     fields = '__all__'
 
-class BookInstanceCreate(View):
+class BookInstanceCreate(UserIsAdminMixin, View):
     def post(self, request):
         instanceType = request.POST['instanceType']
         bookId = request.POST['bookId']
@@ -64,12 +65,12 @@ class BookInstanceDetail(DetailView):
         context['instanceTypes'] = bookInstanceTypes
         return context
 
-class BookInstanceDelete(DeleteView):
+class BookInstanceDelete(UserIsAdminMixin, DeleteView):
     model = models.BookInstance
     context_object_name = "bookInstance"
     success_url = reverse_lazy('books')
 
-class BookInstanceUpdate(View):
+class BookInstanceUpdate(UserIsAdminMixin, View):
     def post(self, request, pk):
         instanceSerialNum = request.POST['instanceSerialNum']
         instanceType = request.POST['instanceType']
@@ -100,12 +101,9 @@ class UserDetail(View):
         user = User.objects.get(username=username)
         return render(request, "user/profile.html")
 
-class UserList(UserPassesTestMixin, ListView):
+class UserList(UserIsAdminMixin, ListView):
     model = User
     template_name = 'user/user_list.html'
-
-    def test_func(self):
-        return self.request.user.groups.filter(name='library_admins').exists()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
