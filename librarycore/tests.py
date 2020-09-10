@@ -45,13 +45,26 @@ class BookViewTests(TestCase):
     def setup(self):
         setup_test_environment()
 
+    def createAdminAndLogin(self):
+        user = User.objects.create_user('admin', 'admin@email.com', 'admin')
+        group = Group.objects.create(name='library_admins')
+        user.groups.add(group)
+        loggedIn = self.client.login(username='admin', password='admin')
+        return loggedIn
+
     def test_createBookPostRequest(self):
+        loggedIn = self.createAdminAndLogin()
+
         url = reverse('book-create')
         postDict = {'bookName': 'testingBook', 'bookAuthor':'testingAuthor', 'bookDescription':'testingDescription'}
         response = self.client.post(url, postDict)
         bookFromDb = models.Book.objects.all()[0]
+
+        self.assertTrue(loggedIn)
         self.assertEqual(bookFromDb.bookName, postDict['bookName'])
         self.assertEqual(bookFromDb.bookAuthor, postDict['bookAuthor'])
+
+        self.client.logout()
 
     def test_booksPageHasCurrentNavSet(self):
         url = reverse('books')
@@ -76,16 +89,31 @@ class BookInstanceViewTests(TestCase):
     def setup(self):
         setup_test_environment()
 
+    def createAdminAndLogin(self):
+        user = User.objects.create_user('admin', 'admin@email.com', 'admin')
+        group = Group.objects.create(name='library_admins')
+        user.groups.add(group)
+        loggedIn = self.client.login(username='admin', password='admin')
+        return loggedIn
+
     def test_createBookInstancePostRequest(self):
+        loggedIn = self.createAdminAndLogin()
+
         book1 = getBooks(1)[0]
         url = reverse('instance-create')
         postDict = {'instanceType': random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES[0]), 'bookId': str(book1.id)}
         response = self.client.post(url, postDict)
         instanceFromDb = models.BookInstance.objects.all()[0]
+
+        self.assertTrue(loggedIn)
         self.assertEqual(instanceFromDb.instanceType, postDict['instanceType'])
         self.assertEqual(instanceFromDb.instanceBook, book1)
 
+        self.client.logout()
+
     def test_updateBookInstancePostRequest(self):
+        loggedIn = self.createAdminAndLogin()
+
         book1 = getBooks(1)[0]
         instance1 = getBookInstances(1, book1)[0]
         url = reverse('instance-update', args=[instance1.instanceSerialNum])
@@ -93,7 +121,11 @@ class BookInstanceViewTests(TestCase):
         postDict = {'instanceSerialNum': instance1.instanceSerialNum, 'instanceType': postInstanceType}
         response = self.client.post(url, postDict)
         instanceFromDb = models.BookInstance.objects.get(pk=postDict['instanceSerialNum'])
+
+        self.assertTrue(loggedIn)
         self.assertEqual(instanceFromDb.instanceType, postDict['instanceType'])
+
+        self.client.logout()
 
     def test_bookInstancePageHasInstanceTypes(self):
         book1 = getBooks(1)[0]
@@ -117,6 +149,8 @@ class UserTests(TestCase):
         self.assertTrue(loggedIn)
         self.assertEqual(usersResponse.status_code, 403)
 
+        self.client.logout()
+
     def test_accessUsersPageWithoutLogin(self):
         loginUrl = reverse('login')
         usersUrl = reverse('users')
@@ -134,4 +168,6 @@ class UserTests(TestCase):
 
         self.assertTrue(loggedIn)
         self.assertEqual(usersResponse.status_code, 200)
+
+        self.client.logout()
 
