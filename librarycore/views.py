@@ -9,16 +9,15 @@ from . import models
 def index(request):
     return render(request, "librarycore/index.html", context={"currentNav": "index"})
 
-class Books(View):
-    def get(self, request):
-        books = models.Book.objects.all()
-        return render(request, "librarycore/books.html", context={"currentNav": "books", "books":books})
+class Books(ListView):
+    model = models.Book
+    template_name = "librarycore/books.html"
+    context_object_name = "books"
 
-    def post(self, request):
-        bookName = request.POST['bookName']
-        authorName = request.POST['authorName']
-        models.Book.objects.create(bookName=bookName, bookAuthor=authorName)
-        return redirect('books')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['currentNav'] = 'books'
+        return context
 
 class BookDelete(DeleteView):
     model = models.Book
