@@ -26,7 +26,7 @@ def getBookInstances(count, book):
     return bookInstances
 
 def getUser(n, admin=False):
-    user = User.objects.create_user(f'testingUser{n}', f'testingUser{n}@email.com', f'testingUser{n}')
+    user = User.objects.create_user(f'testingUser{n}', f'testingUser{n}@email.com', f'testingPassword{n}')
     if admin:
         group = Group.objects.get_or_create(name='library_admins')[0]
         user.groups.add(group)
@@ -108,21 +108,30 @@ class UserTests(TestCase):
 
     def test_accessUsersPageAsNormalUser(self):
         user = getUser(1, False)
-        # TODO: make the user log in
-        url = reverse('users')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 401)
+
+        loggedIn = self.client.login(username='testingUser1', password='testingPassword1')
+
+        usersUrl = reverse('users')
+        usersResponse = self.client.get(usersUrl)
+
+        self.assertTrue(loggedIn)
+        self.assertEqual(usersResponse.status_code, 403)
 
     def test_accessUsersPageWithoutLogin(self):
-        url = reverse('users')
-        response = self.client.get(url)
+        loginUrl = reverse('login')
+        usersUrl = reverse('users')
+        response = self.client.get(usersUrl)
         self.assertEqual(response.status_code, 302)
-        # TODO: check if the redirect URL is there in the response
+        self.assertEqual(response.url, f'{loginUrl}?next={usersUrl}')
 
     def test_accessUsersPageAsAdmin(self):
         admin = getUser(1, True)
-        # TODO: make the admin log in
-        url = reverse('users')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+
+        loggedIn = self.client.login(username='testingUser1', password='testingPassword1')
+
+        usersUrl = reverse('users')
+        usersResponse = self.client.get(usersUrl)
+
+        self.assertTrue(loggedIn)
+        self.assertEqual(usersResponse.status_code, 200)
 
