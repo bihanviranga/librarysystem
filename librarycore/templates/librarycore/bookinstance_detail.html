@@ -8,11 +8,14 @@
 	<p>{{bookInstance.instanceType}}</p>
 </div>
 
+{% if isAdmin %}
 <div class="container" style="margin-bottom:1em;">
 	<a class="btn btn-danger" href="{% url 'instance-delete' bookInstance.instanceSerialNum %}">Delete</a>
 	<a class="btn btn-secondary" id="btnButtonUpdateShow" onclick="bookInstanceUpdateToggle()">Update</a>
 </div>
+{% endif %}
 
+{% if isAdmin %}
 <div class="container">
 	<form action="{% url 'instance-update' bookInstance.instanceSerialNum %}" method="POST" id="updateInstance"
 		hidden="true" class="form-inline">
@@ -31,12 +34,15 @@
 		<button class="btn btn-primary form-control">Edit</button>
 	</form>
 </div>
+{% endif %}
 
+{% if isAdmin %}
 <script>
 	function bookInstanceUpdateToggle() {
 		$("#btnButtonUpdateShow").attr("hidden", true);
 		$("#updateInstance").attr("hidden", false);
 	}
 </script>
+{% endif %}
 
 {% endblock %}

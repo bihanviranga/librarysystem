@@ -18,6 +18,9 @@ class Books(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['currentNav'] = 'books'
+
+        if self.request.user.groups.filter(name='library_admins').exists():
+            context['isAdmin'] = True
         return context
 
 class BookDelete(UserIsAdminMixin, DeleteView):
@@ -35,6 +38,9 @@ class BookDetail(DetailView):
         context['instances'] = bookInstances
         bookInstanceTypes = models.BookInstance.INSTANCE_TYPE_CHOICES
         context['instanceTypes'] = bookInstanceTypes
+
+        if self.request.user.groups.filter(name='library_admins').exists():
+            context['isAdmin'] = True
         return context
 
 class BookUpdate(UserIsAdminMixin, UpdateView):
@@ -63,6 +69,10 @@ class BookInstanceDetail(DetailView):
         context = super().get_context_data(**kwargs)
         bookInstanceTypes = models.BookInstance.INSTANCE_TYPE_CHOICES
         context['instanceTypes'] = bookInstanceTypes
+
+        if self.request.user.groups.filter(name='library_admins').exists():
+            context['isAdmin'] = True
+
         return context
 
 class BookInstanceDelete(UserIsAdminMixin, DeleteView):

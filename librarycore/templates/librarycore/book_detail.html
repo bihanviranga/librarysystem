@@ -9,6 +9,7 @@
 	<p>Description: {{book.bookDescription}}</p>
 </div>
 
+{% if isAdmin %}
 <div class="container">
 	<a class="btn btn-success" id="btnInstanceNewShow" onclick="instanceNewToggle()">New instance</a>
 	<form method="post" id="formNewInstance" hidden="true" action="{% url 'instance-create' %}">
@@ -21,11 +22,12 @@
 		</select>
 		<button class="btn btn-success">Create</button>
 	</form>
-	<hr>
 </div>
+{% endif %}
 
 
 <div class="container">
+	<hr>
 	{% if instances.count == 0 %}
 	<p>No copies available</p>
 	{% else %}
@@ -47,9 +49,12 @@
 	{% endif %}
 </div>
 
+{% if isAdmin %}
 <script>
 	function instanceNewToggle() {
 		$(" #btnInstanceNewShow").attr("hidden", true); $("#formNewInstance").attr("hidden", false);
-	} </script>
+	}
+</script>
+{% endif %}
 
 {% endblock %}

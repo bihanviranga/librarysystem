@@ -3,6 +3,7 @@
 {% block maintitle %}Books page{% endblock %}
 
 {% block content %}
+{% if isAdmin %}
 <div class="container" style="margin-bottom: 2em;">
 	<div class="row">
 		<div class="col-1">
@@ -18,6 +19,8 @@
 		</div>
 	</div>
 </div>
+{% endif %}
+
 <div class="container">
 	{% for book in books %}
 	<div class="row">
@@ -27,14 +30,17 @@
 		<div class="col">
 			<p>{{book.bookAuthor}}</p>
 		</div>
+		{% if isAdmin %}
 		<div class="col">
 			<a class="btn btn-danger" href="{% url 'book-delete' book.id %}">Delete</a>
 			<a class="btn btn-secondary" href="{% url 'book-update' book.id %}">Update</a>
 		</div>
+		{% endif %}
 	</div>
 	{% endfor %}
 </div>
 
+{% if isAdmin %}
 <script>
 	function bookNewToggle() {
 		$("#btnBookNewShow").attr("hidden", true);
@@ -44,5 +50,6 @@
 		$("#txtBookName").focus();
 	}
 </script>
+{% endif %}
 
 {% endblock %}
