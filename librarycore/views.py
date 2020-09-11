@@ -99,7 +99,7 @@ class UserSignup(View):
 class UserDetail(View):
     def get(self, request, username):
         user = User.objects.get(username=username)
-        return render(request, "user/profile.html")
+        return render(request, "user/profile.html", {'profile':user})
 
 class UserList(UserIsAdminMixin, ListView):
     model = User

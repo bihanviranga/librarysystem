@@ -1,17 +1,17 @@
 {% extends 'librarycore/index.html' %}
 
 {% block maintitle %}
-{{ user }}'s Profile
+{{ profile }}'s Profile
 {% endblock %}
 
 {% block content %}
 <div class="container">
-	<p>Username: {{user.username}}</p>
-	<p>Email: {{user.email}}</p>
-	{% if user.groups.all %}
+	<p>Username: {{profile.username}}</p>
+	<p>Email: {{profile.email}}</p>
+	{% if profile.groups.all %}
 	<p>Groups:</p>
 	<ul>
-		{% for group in user.groups.all %}
+		{% for group in profile.groups.all %}
 		<li>{{ group }}</li>
 		{% endfor %}
 	</ul>
