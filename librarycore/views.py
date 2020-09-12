@@ -7,6 +7,13 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from . import models
 from .mixins import UserIsAdminMixin
 
+# Utility function
+# Currently there's only 1 of these.
+# If the num of utility functions grows, will move them
+# into a seperate file.
+def isUserAdmin(user):
+    return user.groups.filter(name='library_admins').exists()
+
 def index(request):
     return render(request, "librarycore/index.html", context={"currentNav": "index"})
 
@@ -19,7 +26,7 @@ class Books(ListView):
         context = super().get_context_data(**kwargs)
         context['currentNav'] = 'books'
 
-        if self.request.user.groups.filter(name='library_admins').exists():
+        if isUserAdmin(self.request.user):
             context['isAdmin'] = True
         return context
 
@@ -39,7 +46,7 @@ class BookDetail(DetailView):
         bookInstanceTypes = models.BookInstance.INSTANCE_TYPE_CHOICES
         context['instanceTypes'] = bookInstanceTypes
 
-        if self.request.user.groups.filter(name='library_admins').exists():
+        if isUserAdmin(self.request.user):
             context['isAdmin'] = True
         return context
 
@@ -70,7 +77,7 @@ class BookInstanceDetail(DetailView):
         bookInstanceTypes = models.BookInstance.INSTANCE_TYPE_CHOICES
         context['instanceTypes'] = bookInstanceTypes
 
-        if self.request.user.groups.filter(name='library_admins').exists():
+        if isUserAdmin(self.request.user):
             context['isAdmin'] = True
 
         return context
