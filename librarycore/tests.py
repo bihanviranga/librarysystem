@@ -14,7 +14,10 @@ def getBooks(count):
         bookAuthor = f'testingAuthor{i}'
         book = models.Book.objects.create(bookName=bookName, bookAuthor=bookAuthor)
         books.append(book)
-    return books
+    if count == 1:
+        return books[0]
+    else:
+        return books
 
 def getBookInstances(count, book):
     bookInstances = []
@@ -23,7 +26,10 @@ def getBookInstances(count, book):
         instanceType = random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES)[0]
         instance = models.BookInstance.objects.create(instanceBook=instanceBook, instanceType=instanceType)
         bookInstances.append(instance)
-    return bookInstances
+    if count == 1:
+        return bookInstances[0]
+    else:
+        return bookInstances
 
 def getUser(n, admin=False):
     user = User.objects.create_user(f'testingUser{n}', f'testingUser{n}@email.com', f'testingPassword{n}')
@@ -78,7 +84,7 @@ class BookViewTests(LibraryTestCase):
         self.assertEqual(response.context['currentNav'], 'books')
 
     def test_bookDetailPageHasBookInstances(self):
-        book1 = getBooks(1)[0]
+        book1 = getBooks(1)
         instances = getBookInstances(3, book1)
         url = reverse('book-detail', args=[book1.id])
         response = self.client.get(url)
@@ -86,7 +92,7 @@ class BookViewTests(LibraryTestCase):
         self.assertEqual(querysetFromContext, instances)
 
     def test_bookDetailPageHasBookInstanceTypes(self):
-        book1 = getBooks(1)[0]
+        book1 = getBooks(1)
         url = reverse('book-detail', args=[book1.id])
         response = self.client.get(url)
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
@@ -98,7 +104,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_createBookInstancePostRequest(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
-        book1 = getBooks(1)[0]
+        book1 = getBooks(1)
         url = reverse('instance-create')
         postDict = {'instanceType': random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES[0]), 'bookId': str(book1.id)}
         response = self.client.post(url, postDict)
@@ -111,8 +117,8 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_updateBookInstancePostRequest(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
-        book1 = getBooks(1)[0]
-        instance1 = getBookInstances(1, book1)[0]
+        book1 = getBooks(1)
+        instance1 = getBookInstances(1, book1)
         url = reverse('instance-update', args=[instance1.instanceSerialNum])
         postInstanceType = random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES)[0]
         postDict = {'instanceSerialNum': instance1.instanceSerialNum, 'instanceType': postInstanceType}
@@ -123,8 +129,8 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertEqual(instanceFromDb.instanceType, postDict['instanceType'])
 
     def test_bookInstancePageHasInstanceTypes(self):
-        book1 = getBooks(1)[0]
-        instance = getBookInstances(1, book1)[0]
+        book1 = getBooks(1)
+        instance = getBookInstances(1, book1)
         url = reverse('instance-detail', args=[instance.instanceSerialNum])
         response = self.client.get(url)
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
