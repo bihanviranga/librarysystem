@@ -4,11 +4,13 @@
 
 ### Todo
 - [ ] Testcases for not found views
-- [ ] Normal users who can borrow books.
 - [ ] Admins can see who borrowed books.
-- [ ] Normal users can see only whether it is borrowed or not.
+- [ ] Users can see the books they have borrowed.
 
 ### Done
+- [X] Normal users can see whether a book is borrowed or not.
+- [X] All users can borrow books.
+- [X] Users can return borrowed books.
 - [X] Normal users who can view books and instances
 - [X] Admin users who can CRUD books and instances
 - [X] Admins can see a list of normal users.
