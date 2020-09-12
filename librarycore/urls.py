@@ -22,4 +22,5 @@ urlpatterns = [
     path('bookinstances/<str:pk>/delete/', views.BookInstanceDelete.as_view(), name='instance-delete'),
     path('bookinstances/<str:pk>/update/', views.BookInstanceUpdate.as_view(), name='instance-update'),
     path('bookinstances/borrow', views.BookInstanceBorrow.as_view(), name='instance-borrow'),
+    path('bookinstances/return', views.BookInstanceReturn.as_view(), name='instance-return'),
 ]

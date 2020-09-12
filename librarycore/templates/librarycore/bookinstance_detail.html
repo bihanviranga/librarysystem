@@ -56,7 +56,11 @@
 {% if borrowedBySelf %}
 <div class="container">
 	<p>This book is borrowed by you!</p>
-	<button class="btn btn-success">Return this book</button>
+	<form method="POST" action="{% url 'instance-return' %}">
+		{% csrf_token %}
+		<input type="hidden" name="bookInstanceId" value="{{bookInstance.instanceSerialNum}}" />
+		<button class="btn btn-success">Return this book</button>
+	</form>
 </div>
 {% endif %}
 

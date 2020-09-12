@@ -3,7 +3,7 @@ from django.views import View
 from django.views.generic import DeleteView, DetailView, UpdateView, CreateView, ListView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from . import models
 from .mixins import UserIsAdminMixin
 
@@ -81,9 +81,8 @@ class BookInstanceDetail(DetailView):
         bookInstance = self.get_object()
         if bookInstance.borrowedBy:
             context['isBorrowed'] = True
-
-        if bookInstance.borrowedBy.username == self.request.user.username:
-            context['borrowedBySelf'] = True
+            if bookInstance.borrowedBy.username == self.request.user.username:
+                context['borrowedBySelf'] = True
 
         if isUserAdmin(self.request.user):
             context['isAdmin'] = True
@@ -135,12 +134,21 @@ class UserList(UserIsAdminMixin, ListView):
         context['currentNav'] = 'users'
         return context
 
-
-class BookInstanceBorrow(View):
+class BookInstanceBorrow(LoginRequiredMixin, View):
     def post(self, request):
-        user = User.objects.get(username=request.POST['borrowingUser'])
-        bookInstanceId = models.BookInstance.objects.get(instanceSerialNum=request.POST['bookInstanceId'])
-        bookInstanceId.borrowedBy = user
-        bookInstanceId.save()
+        user = request.user
+        bookInstance = models.BookInstance.objects.get(instanceSerialNum=request.POST['bookInstanceId'])
+        if not bookInstance.borrowedBy:
+            bookInstance.borrowedBy = user
+            bookInstance.save()
+        return redirect('instance-detail', request.POST['bookInstanceId'])
+
+class BookInstanceReturn(LoginRequiredMixin, View):
+    def post(self, request):
+        user = request.user
+        bookInstance = models.BookInstance.objects.get(instanceSerialNum=request.POST['bookInstanceId'])
+        if bookInstance.borrowedBy == user:
+            bookInstance.borrowedBy = None
+            bookInstance.save()
         return redirect('instance-detail', request.POST['bookInstanceId'])
 
