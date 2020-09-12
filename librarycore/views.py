@@ -74,8 +74,16 @@ class BookInstanceDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         bookInstanceTypes = models.BookInstance.INSTANCE_TYPE_CHOICES
         context['instanceTypes'] = bookInstanceTypes
+
+        bookInstance = self.get_object()
+        if bookInstance.borrowedBy:
+            context['isBorrowed'] = True
+
+        if bookInstance.borrowedBy.username == self.request.user.username:
+            context['borrowedBySelf'] = True
 
         if isUserAdmin(self.request.user):
             context['isAdmin'] = True
@@ -126,4 +134,13 @@ class UserList(UserIsAdminMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['currentNav'] = 'users'
         return context
+
+
+class BookInstanceBorrow(View):
+    def post(self, request):
+        user = User.objects.get(username=request.POST['borrowingUser'])
+        bookInstanceId = models.BookInstance.objects.get(instanceSerialNum=request.POST['bookInstanceId'])
+        bookInstanceId.borrowedBy = user
+        bookInstanceId.save()
+        return redirect('instance-detail', request.POST['bookInstanceId'])
 

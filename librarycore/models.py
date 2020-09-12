@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
 
 class Book(models.Model):
     bookName = models.CharField(max_length=100)
@@ -20,4 +21,5 @@ class BookInstance(models.Model):
     instanceSerialNum = models.UUIDField(primary_key=True, default=uuid.uuid4)
     instanceBook = models.ForeignKey('Book', on_delete=models.CASCADE)
     instanceType = models.CharField(max_length=20, choices=INSTANCE_TYPE_CHOICES, default=PHYSICAL_COPY)
+    borrowedBy = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='borrowedBook', default=None,null=True)
 
