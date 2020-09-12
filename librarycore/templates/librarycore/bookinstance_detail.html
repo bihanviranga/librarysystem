@@ -46,7 +46,6 @@
 <div class="container">
 	<form method="POST" action="{% url 'instance-borrow' %}">
 		{% csrf_token %}
-		<input type="hidden" name="borrowingUser" value="{{user.get_username}}" />
 		<input type="hidden" name="bookInstanceId" value="{{bookInstance.instanceSerialNum}}" />
 		<button class="btn btn-primary">Borrow this book</button>
 	</form>
