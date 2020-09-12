@@ -40,9 +40,11 @@ def getUser(n, admin=False):
 
 class LibraryTestCase(TestCase):
     loggedIn = False
+    user = None
 
     def createUserAndLogin(self, n, admin=False):
         user = getUser(1, admin)
+        self.user = user
         loggedIn = self.client.login(username=f'testingUser{n}', password=f'testingPassword{n}')
         return loggedIn
 
@@ -136,16 +138,65 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
 
     def test_userCanBorrowBookInstances(self):
-        self.fail("Test not written")
+        self.loggedIn = self.createUserAndLogin(1)
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+
+        url = reverse('instance-borrow')
+        postDict = {'bookInstanceId': instance.instanceSerialNum}
+        response = self.client.post(url, postDict)
+
+        # 'refresh' the instance obj
+        instance = models.BookInstance.objects.get(pk=instance.instanceSerialNum)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(instance.borrowedBy.username, self.user.username)
 
     def test_userCannotBorrowAlreadyBorrowedBookInstances(self):
-        self.fail("Test not written")
+        borrowingUser = getUser(2)
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+        instance.borrowedBy = borrowingUser
+        instance.save()
+
+        self.loggedIn = self.createUserAndLogin(1)
+        url = reverse('instance-borrow')
+        postDict = {'bookInstanceId': instance.instanceSerialNum}
+        response = self.client.post(url, postDict)
+
+        instance = models.BookInstance.objects.get(pk=instance.instanceSerialNum)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(instance.borrowedBy.username, borrowingUser.username)
 
     def test_userCanReturnBookInstances(self):
-        self.fail("Test not written")
+        self.loggedIn = self.createUserAndLogin(1)
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+        instance.borrowedBy = self.user
+        instance.save()
+
+        url = reverse('instance-return')
+        postDict = {'bookInstanceId': instance.instanceSerialNum}
+        response = self.client.post(url, postDict)
+
+        instance = models.BookInstance.objects.get(pk=instance.instanceSerialNum)
+
+        self.assertTrue(self.loggedIn)
+        self.assertIsNone(instance.borrowedBy)
 
     def test_cannotBorrowBookInstancesWithoutLogin(self):
-        self.fail("Test not written")
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+
+        url = reverse('instance-borrow')
+        postDict = {'bookInstanceId':instance.instanceSerialNum}
+        response = self.client.post(url, postDict)
+
+        instance = models.BookInstance.objects.get(pk=instance.instanceSerialNum)
+
+        self.assertFalse(self.loggedIn)
+        self.assertIsNone(instance.borrowedBy)
 
 class UserTests(LibraryTestCase):
     def setup(self):
