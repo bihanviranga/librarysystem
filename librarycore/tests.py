@@ -215,6 +215,7 @@ class UserTests(LibraryTestCase):
         loginUrl = reverse('login')
         usersUrl = reverse('users')
         response = self.client.get(usersUrl)
+        self.assertFalse(self.loggedIn)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, f'{loginUrl}?next={usersUrl}')
 
