@@ -43,7 +43,7 @@ class LibraryTestCase(TestCase):
     user = None
 
     def createUserAndLogin(self, n, admin=False):
-        user = getUser(1, admin)
+        user = getUser(n, admin)
         self.user = user
         loggedIn = self.client.login(username=f'testingUser{n}', password=f'testingPassword{n}')
         return loggedIn
@@ -197,6 +197,41 @@ class BookInstanceViewTests(LibraryTestCase):
 
         self.assertFalse(self.loggedIn)
         self.assertIsNone(instance.borrowedBy)
+
+    def test_userCanSeeWhetherInstanceIsBorrowed(self):
+        self.fail()
+
+    def test_adminCanSeeWhoBorrowedInstance(self):
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+        borrowingUser = getUser(1)
+        instance.borrowedBy = borrowingUser
+        instance.save()
+
+        self.loggedIn = self.createUserAndLogin(2, True)
+
+        url = reverse('instance-detail', args=[instance.instanceSerialNum])
+        response = self.client.get(url)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEquals(response.context['borrowedBy'], borrowingUser.username)
+
+    def test_normalUsersCannotSeeWhoBorrowedInstance(self):
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+        borrowingUser = getUser(1)
+        instance.borrowedBy = borrowingUser
+        instance.save()
+
+        self.loggedIn = self.createUserAndLogin(2)
+
+        url = reverse('instance-detail', args=[instance.instanceSerialNum])
+        response = self.client.get(url)
+
+        contextKeys = response.context.keys()
+
+        self.assertTrue(self.loggedIn)
+        self.assertNotIn('borrowedBy', contextKeys)
 
 class UserTests(LibraryTestCase):
     def setup(self):
