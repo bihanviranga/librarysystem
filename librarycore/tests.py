@@ -200,18 +200,22 @@ class BookInstanceViewTests(LibraryTestCase):
 
     def test_userCanSeeWhetherInstanceIsBorrowed(self):
         book = getBooks(1)
-        instance = getBookInstances(1, book)
+        instance1, instance2 = getBookInstances(2, book)
         borrowingUser = getUser(1)
-        instance.borrowedBy = borrowingUser
-        instance.save()
+        instance1.borrowedBy = borrowingUser
+        instance1.save()
 
         self.loggedIn = self.createUserAndLogin(2, True)
 
-        url = reverse('instance-detail', args=[instance.instanceSerialNum])
-        response = self.client.get(url)
+        url1 = reverse('instance-detail', args=[instance1.instanceSerialNum])
+        response1 = self.client.get(url1)
+
+        url2 = reverse('instance-detail', args=[instance2.instanceSerialNum])
+        response2 = self.client.get(url2)
 
         self.assertTrue(self.loggedIn)
-        self.assertIn('isBorrowed', response.context.keys())
+        self.assertIn('isBorrowed', response1.context.keys())
+        self.assertNotIn('isBorrowed', response2.context.keys())
 
     def test_adminCanSeeWhoBorrowedInstance(self):
         book = getBooks(1)

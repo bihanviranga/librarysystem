@@ -86,7 +86,8 @@ class BookInstanceDetail(DetailView):
 
         if isUserAdmin(self.request.user):
             context['isAdmin'] = True
-            context['borrowedBy'] = bookInstance.borrowedBy.username
+            if bookInstance.borrowedBy:
+                context['borrowedBy'] = bookInstance.borrowedBy.username
 
         return context
 
