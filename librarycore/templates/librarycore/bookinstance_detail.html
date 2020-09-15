@@ -39,9 +39,16 @@
 {% if isBorrowed %}
 {% if not borrowedBySelf %}
 <div class="container">
-	<p>This book has been borrowed by someone else</p>
+	<p>This book has been borrowed.</p>
 </div>
 {% endif %}
+
+{% if isAdmin%}
+<div class="container">
+	<p>Borrowed by <a href="{% url 'profile' borrowedBy %}">{{borrowedBy}}</a></p>
+</div>
+{% endif %}
+
 {% else %}
 <div class="container">
 	<form method="POST" action="{% url 'instance-borrow' %}">
