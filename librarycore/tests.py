@@ -199,7 +199,19 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertIsNone(instance.borrowedBy)
 
     def test_userCanSeeWhetherInstanceIsBorrowed(self):
-        self.fail()
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+        borrowingUser = getUser(1)
+        instance.borrowedBy = borrowingUser
+        instance.save()
+
+        self.loggedIn = self.createUserAndLogin(2, True)
+
+        url = reverse('instance-detail', args=[instance.instanceSerialNum])
+        response = self.client.get(url)
+
+        self.assertTrue(self.loggedIn)
+        self.assertIn('isBorrowed', response.context.keys())
 
     def test_adminCanSeeWhoBorrowedInstance(self):
         book = getBooks(1)
@@ -228,10 +240,8 @@ class BookInstanceViewTests(LibraryTestCase):
         url = reverse('instance-detail', args=[instance.instanceSerialNum])
         response = self.client.get(url)
 
-        contextKeys = response.context.keys()
-
         self.assertTrue(self.loggedIn)
-        self.assertNotIn('borrowedBy', contextKeys)
+        self.assertNotIn('borrowedBy', response.context.keys())
 
 class UserTests(LibraryTestCase):
     def setup(self):
