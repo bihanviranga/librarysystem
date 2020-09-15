@@ -1,12 +1,18 @@
 # Django library management system
 
+## Testing
+
+- Run tests with `python manage.py test`
+- Tests are tagged as general, book, book-instance, user.
+- Run a specific group of tests with `python manage.py test --tag=general`
+
 ## Roadmap
 
 ### Todo
 - [ ] Testcases for not found views
-- [ ] Users can see the books they have borrowed.
 
 ### Done
+- [X] Users can see the books they have borrowed.
 - [X] Admins can see who borrowed books.
 - [X] Normal users can see whether a book is borrowed or not.
 - [X] All users can borrow books.

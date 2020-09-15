@@ -1,5 +1,5 @@
 import random
-from django.test import TestCase
+from django.test import TestCase, tag
 from django.test.utils import setup_test_environment
 from django.urls import reverse
 from django.contrib.auth.models import User, Group
@@ -53,6 +53,7 @@ class LibraryTestCase(TestCase):
             self.client.logout()
             self.loggedIn = False
 
+@tag('general')
 class GeneralSiteTests(TestCase):
     def setup(self):
         setup_test_environment()
@@ -62,6 +63,7 @@ class GeneralSiteTests(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.context['currentNav'], 'index')
 
+@tag('book')
 class BookViewTests(LibraryTestCase):
     def setup(self):
         setup_test_environment()
@@ -97,6 +99,7 @@ class BookViewTests(LibraryTestCase):
         response = self.client.get(url)
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
 
+@tag('book-instance')
 class BookInstanceViewTests(LibraryTestCase):
     def setup(self):
         setup_test_environment()
@@ -245,6 +248,7 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertNotIn('borrowedBy', response.context.keys())
 
+@tag('user')
 class UserTests(LibraryTestCase):
     def setup(self):
         setup_test_environment()
