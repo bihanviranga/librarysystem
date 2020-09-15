@@ -125,7 +125,13 @@ class UserSignup(View):
 class UserDetail(View):
     def get(self, request, username):
         user = User.objects.get(username=username)
-        return render(request, "user/profile.html", {'profile':user})
+        context = {'profile':user}
+
+        if isUserAdmin(request.user) or request.user.username==user.username:
+            borrowedBooks = models.BookInstance.objects.filter(borrowedBy__username=user.username)
+            context['borrowedBooks'] = borrowedBooks
+
+        return render(request, "user/profile.html", context)
 
 class UserList(UserIsAdminMixin, ListView):
     model = User

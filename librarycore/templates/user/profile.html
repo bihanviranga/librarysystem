@@ -17,4 +17,15 @@
 	</ul>
 	{% endif %}
 </div>
+
+{% if borrowedBooks %}
+<div class="container">
+	<h3>Books borrowed</h3>
+	{% for book in borrowedBooks %}
+	<p>{{book.instanceBook.bookName}} - <a
+			href="{% url 'instance-detail' book.instanceSerialNum %}">{{book.instanceSerialNum}}</a></p>
+	{% endfor %}
+</div>
+{% endif %}
+
 {% endblock %}
