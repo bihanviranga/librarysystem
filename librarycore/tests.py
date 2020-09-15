@@ -78,8 +78,6 @@ class BookViewTests(LibraryTestCase):
         self.assertEqual(bookFromDb.bookName, postDict['bookName'])
         self.assertEqual(bookFromDb.bookAuthor, postDict['bookAuthor'])
 
-        self.client.logout()
-
     def test_booksPageHasCurrentNavSet(self):
         url = reverse('books')
         response = self.client.get(url)
@@ -276,4 +274,51 @@ class UserTests(LibraryTestCase):
 
         self.assertTrue(self.loggedIn)
         self.assertEqual(usersResponse.status_code, 200)
+
+    def test_userCanSeeOwnBorrowedBooks(self):
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+        self.loggedIn = self.createUserAndLogin(1)
+        instance.borrowedBy = self.user
+        instance.save()
+
+        url = reverse('profile', args=[self.user.username])
+        response = self.client.get(url)
+
+        userBorrowedBooks = models.BookInstance.objects.filter(borrowedBy__username=self.user.username)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(list(userBorrowedBooks), list(response.context['borrowedBooks']))
+
+    def test_userCannotSeeOtherUserBorrowedBooks(self):
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+        borrowingUser = getUser(1)
+        instance.borrowedBy = borrowingUser
+        instance.save()
+
+        self.loggedIn = self.createUserAndLogin(2)
+
+        url = reverse('profile', args=[borrowingUser.username])
+        response = self.client.get(url)
+
+        self.assertTrue(self.loggedIn)
+        self.assertNotIn('borrowedBooks', response.context.keys())
+
+    def test_adminCanSeeUserBorrowedBooks(self):
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+        borrowingUser = getUser(1)
+        instance.borrowedBy = borrowingUser
+        instance.save()
+
+        self.loggedIn = self.createUserAndLogin(2, True)
+
+        url = reverse('profile', args=[borrowingUser.username])
+        response = self.client.get(url)
+
+        userBorrowedBooks = models.BookInstance.objects.filter(borrowedBy__username=borrowingUser.username)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEquals(list(userBorrowedBooks), list(response.context['borrowedBooks']))
 
