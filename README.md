@@ -4,10 +4,10 @@
 
 ### Todo
 - [ ] Testcases for not found views
-- [ ] Admins can see who borrowed books.
 - [ ] Users can see the books they have borrowed.
 
 ### Done
+- [X] Admins can see who borrowed books.
 - [X] Normal users can see whether a book is borrowed or not.
 - [X] All users can borrow books.
 - [X] Users can return borrowed books.
