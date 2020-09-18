@@ -10,8 +10,12 @@
 
 ### Todo
 - [ ] Testcases for not found views
+- [ ] Read/not read marked in each book.
+- [ ] Instance list views shows borrowed/not borrowed.
 
 ### Done
+- [X] Normal users cannot mark books as borrowed.
+- [X] Admins can mark books as borrowed/returned.
 - [X] Users can see the books they have borrowed.
 - [X] Admins can see who borrowed books.
 - [X] Normal users can see whether a book is borrowed or not.

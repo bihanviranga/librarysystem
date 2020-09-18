@@ -142,21 +142,20 @@ class UserList(UserIsAdminMixin, ListView):
         context['currentNav'] = 'users'
         return context
 
-class BookInstanceBorrow(LoginRequiredMixin, View):
+class BookInstanceBorrow(UserIsAdminMixin, View):
     def post(self, request):
-        user = request.user
+        username = request.POST['borrowingUser']
+        user = User.objects.get(username=username)
         bookInstance = models.BookInstance.objects.get(instanceSerialNum=request.POST['bookInstanceId'])
         if not bookInstance.borrowedBy:
             bookInstance.borrowedBy = user
             bookInstance.save()
         return redirect('instance-detail', request.POST['bookInstanceId'])
 
-class BookInstanceReturn(LoginRequiredMixin, View):
+class BookInstanceReturn(UserIsAdminMixin, View):
     def post(self, request):
-        user = request.user
         bookInstance = models.BookInstance.objects.get(instanceSerialNum=request.POST['bookInstanceId'])
-        if bookInstance.borrowedBy == user:
-            bookInstance.borrowedBy = None
-            bookInstance.save()
+        bookInstance.borrowedBy = None
+        bookInstance.save()
         return redirect('instance-detail', request.POST['bookInstanceId'])
 
