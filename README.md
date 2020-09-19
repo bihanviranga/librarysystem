@@ -12,6 +12,8 @@
 - [ ] Testcases for not found views
 - [ ] Read/not read marked in each book.
 - [ ] Instance list views shows borrowed/not borrowed.
+- [ ] Book list view shows how many available or not.
+- [ ] Book instance types refactor into a seperate models (types can be hardcover, paperback, magazine, etc)
 
 ### Done
 - [X] Normal users cannot mark books as borrowed.

@@ -44,6 +44,13 @@
 		<div class="col">
 			<a href="{% url 'instance-detail' instance.instanceSerialNum %}">{{instance.instanceSerialNum}}</a>
 		</div>
+		<div class="col">
+			{% if instance.borrowedBy %}
+			<span class="badge badge-danger">Not available</span>
+			{% else %}
+			<span class="badge badge-success">Available</span>
+			{% endif %}
+		</div>
 	</div>
 	{% endfor %}
 	{% endif %}
