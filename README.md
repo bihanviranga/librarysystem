@@ -11,13 +11,13 @@
 ### Todo
 - [ ] Testcases for not found views
 - [ ] Read/not read marked in each book.
-- [ ] Instance list views shows borrowed/not borrowed.
 - [ ] Book instance types refactor into a seperate models (types can be hardcover, paperback, magazine, etc)
 - [ ] Book authors refactor into seperate models.
 - [ ] User rate books.
-- [ ] Since Books is not a list view anymore, test it!
 
 ### Done
+- [X] Instance list views shows borrowed/not borrowed.
+- [X] Since Books is not a list view anymore, test it!
 - [X] Book list view shows how many available or not.
 - [X] Normal users cannot mark books as borrowed.
 - [X] Admins can mark books as borrowed/returned.

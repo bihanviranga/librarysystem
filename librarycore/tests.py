@@ -99,6 +99,24 @@ class BookViewTests(LibraryTestCase):
         response = self.client.get(url)
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
 
+    def test_booksPageShowsBooksCounts(self):
+        book = getBooks(1)
+        instances = getBookInstances(5, book)
+        user = getUser(1)
+        instances[0].borrowedBy = user
+        instances[0].save()
+        instances[1].borrowedBy = user
+        instances[1].save()
+
+        url = reverse('books')
+        response = self.client.get(url)
+
+        bookFromResponse = response.context['books'][0]
+
+        self.assertEqual(bookFromResponse['count'], 5)
+        self.assertEqual(bookFromResponse['numAvailable'], 3)
+        self.assertEqual(bookFromResponse['numBorrowed'], 2)
+
 @tag('book-instance')
 class BookInstanceViewTests(LibraryTestCase):
     def setup(self):
