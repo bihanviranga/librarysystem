@@ -138,8 +138,7 @@ class BookInstanceViewTests(LibraryTestCase):
         response = self.client.get(url)
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
 
-    # TODO: think of a better name for this test?
-    def test_adminCanBorrowBookInstances(self):
+    def test_adminCanMarkInstancesAsBorrowed(self):
         self.loggedIn = self.createUserAndLogin(1, True)
         borrowingUser = getUser(2)
         book = getBooks(1)
@@ -155,7 +154,6 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(instance.borrowedBy.username, borrowingUser.username)
 
-    # TODO: think of a better name for this test?
     def test_adminCannotBorrowAlreadyBorrowedBookInstances(self):
         borrowingUser = getUser(1)
         borrowingUser2 = getUser(2)
@@ -175,7 +173,7 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertEqual(instance.borrowedBy.username, borrowingUser.username)
 
     # TODO: think of a better name for this test?
-    def test_adminCanReturnBookInstances(self):
+    def test_adminCanMarkBookInstancesAsReturned(self):
         self.loggedIn = self.createUserAndLogin(1, True)
         user = getUser(2)
         book = getBooks(1)
