@@ -30,6 +30,11 @@
 		<div class="col">
 			<p>{{book.bookAuthor}}</p>
 		</div>
+		<div class="col">
+			<span>{{book.count}} copies</span>
+			<span class="badge badge-success">{{book.numAvailable}} available</span>
+			<span class="badge badge-danger">{{book.numBorrowed}} on loan</span>
+		</div>
 		{% if isAdmin %}
 		<div class="col">
 			<a class="btn btn-danger" href="{% url 'book-delete' book.id %}">Delete</a>

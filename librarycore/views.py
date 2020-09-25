@@ -22,11 +22,18 @@ class Books(View):
         context = {'currentNav': 'books'}
 
         books = models.Book.objects.all()
-        context['books'] = books
+        contextBooks = []
+        for book in books:
+            bookDict = book.__dict__
+            bookDict['count'] = models.BookInstance.objects.filter(instanceBook=book).count()
+            bookDict['numAvailable'] = models.BookInstance.objects.filter(instanceBook=book).filter(borrowedBy=None).count()
+            bookDict['numBorrowed'] = bookDict['count'] - bookDict['numAvailable']
+            contextBooks.append(bookDict)
 
         if isUserAdmin(self.request.user):
             context['isAdmin'] = True
 
+        context['books'] = contextBooks
         return render(request, "librarycore/books.html", context)
 
 class BookDelete(UserIsAdminMixin, DeleteView):
