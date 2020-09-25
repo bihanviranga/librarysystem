@@ -17,18 +17,17 @@ def isUserAdmin(user):
 def index(request):
     return render(request, "librarycore/index.html", context={"currentNav": "index"})
 
-class Books(ListView):
-    model = models.Book
-    template_name = "librarycore/books.html"
-    context_object_name = "books"
+class Books(View):
+    def get(self, request):
+        context = {'currentNav': 'books'}
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['currentNav'] = 'books'
+        books = models.Book.objects.all()
+        context['books'] = books
 
         if isUserAdmin(self.request.user):
             context['isAdmin'] = True
-        return context
+
+        return render(request, "librarycore/books.html", context)
 
 class BookDelete(UserIsAdminMixin, DeleteView):
     model = models.Book
@@ -37,7 +36,6 @@ class BookDelete(UserIsAdminMixin, DeleteView):
 class BookDetail(DetailView):
     model = models.Book
 
-    # pass book instances as well by overriding this method
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book = self.get_object()
