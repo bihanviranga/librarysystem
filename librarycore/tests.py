@@ -7,11 +7,12 @@ from librarycore import models
 
 # TODO: Test NotFound errors in GET and DELETE and UPDATE
 
+# TODO: getBooks with author or without author? add parameter.
 def getBooks(count):
     books = []
     for i in range(count):
         bookName = f'testingBook{i}'
-        bookAuthor = f'testingAuthor{i}'
+        bookAuthor =  models.Author.objects.create(authorName=f'testingAuthor{i}')
         book = models.Book.objects.create(bookName=bookName, bookAuthor=bookAuthor)
         books.append(book)
     if count == 1:
@@ -116,6 +117,17 @@ class BookViewTests(LibraryTestCase):
         self.assertEqual(bookFromResponse['count'], 5)
         self.assertEqual(bookFromResponse['numAvailable'], 3)
         self.assertEqual(bookFromResponse['numBorrowed'], 2)
+
+    def test_booksPageShowsBookInformation(self):
+        books = getBooks(2)
+
+        url = reverse('books')
+        response = self.client.get(url)
+
+        self.assertContains(response, books[0].bookName)
+        self.assertContains(response, books[0].bookAuthor.authorName)
+        self.assertContains(response, books[1].bookName)
+        self.assertContains(response, books[1].bookAuthor.authorName)
 
 @tag('book-instance')
 class BookInstanceViewTests(LibraryTestCase):
