@@ -72,6 +72,8 @@ class BookViewTests(LibraryTestCase):
     def test_createBookPostRequest(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
+        author = models.Author.objects.create(authorName='testingAuthor')
+
         url = reverse('book-create')
         postDict = {'bookName': 'testingBook', 'bookAuthor':'testingAuthor', 'bookDescription':'testingDescription'}
         response = self.client.post(url, postDict)
@@ -120,7 +122,6 @@ class BookViewTests(LibraryTestCase):
 
     def test_booksPageShowsBookInformation(self):
         books = getBooks(2)
-
         url = reverse('books')
         response = self.client.get(url)
 
@@ -128,6 +129,14 @@ class BookViewTests(LibraryTestCase):
         self.assertContains(response, books[0].bookAuthor.authorName)
         self.assertContains(response, books[1].bookName)
         self.assertContains(response, books[1].bookAuthor.authorName)
+
+    def test_bookDetailsPageShowsBookInformation(self):
+        book = getBooks(1)
+        url = reverse('book-detail', args=[book.id])
+        response = self.client.get(url)
+
+        self.assertContains(response, book.bookName)
+        self.assertContains(response, book.bookAuthor.authorName)
 
 @tag('book-instance')
 class BookInstanceViewTests(LibraryTestCase):
