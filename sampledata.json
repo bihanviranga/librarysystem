@@ -1,10 +1,50 @@
 [
 	{
+		"model": "librarycore.Author",
+		"pk": 1,
+		"fields": {
+			"authorName": "J R R Tolkien",
+			"authorDescription": "John Ronald Reuel Tolkien was an English writer, poet, philologist, and academic. He was the author of the high fantasy works The Hobbit and The Lord of the Rings. He served as the Rawlinson and Bosworth Professor of Anglo-Saxon and Fellow of Pembroke College, Oxford, from 1925 to 1945 and Merton Professor of English Language and Literature and Fellow of Merton College, Oxford, from 1945 to 1959."
+		}
+	},
+	{
+		"model": "librarycore.Author",
+		"pk": 2,
+		"fields": {
+			"authorName": "Walt Whitman",
+			"authorDescription": "Walt Whitman was an American poet, essayist, and journalist. A humanist, he was a part of the transition between transcendentalism and realism, incorporating both views in his works. Whitman is among the most influential poets in the American canon, often called the father of free verse."
+		}
+	},
+	{
+		"model": "librarycore.Author",
+		"pk": 3,
+		"fields": {
+			"authorName": "Robert Frost",
+			"authorDescription": "Robert Lee Frost was an American poet. His work was initially published in England before it was published in the United States. Known for his realistic depictions of rural life and his command of American colloquial speech, Frost frequently wrote about settings from rural life in New England in the early twentieth century, using them to examine complex social and philosophical themes. Frost was honored frequently during his lifetime and is the only poet to receive four Pulitzer Prizes for Poetry. He became one of America's rare \"public literary figures, almost an artistic institution.\" He was awarded the Congressional Gold Medal in 1960 for his poetic works. On July 22, 1961, Frost was named poet laureate of Vermont."
+		}
+	},
+	{
+		"model": "librarycore.Author",
+		"pk": 4,
+		"fields": {
+			"authorName": "Walter Isaacson",
+			"authorDescription": "Walter Isaacson is an American analyst, author, journalist, historian, and professor. Positions that he's held include serving as the President and CEO of the Aspen Institute, a nonpartisan educational and policy studies organization based in Washington, D.C., as well as the chairperson and CEO of CNN and as the managing editor of Time."
+		}
+	},
+	{
+		"model": "librarycore.Author",
+		"pk": 5,
+		"fields": {
+			"authorName": "Dan Brown",
+			"authorDescription": "Daniel Gerhard Brown is an American author best known for his thriller novels, including the Robert Langdon novels Angels & Demons, The Da Vinci Code, The Lost Symbol, Inferno and Origin. His novels are treasure hunts that usually take place over a period of 24 hours."
+		}
+	},
+	{
 		"model": "librarycore.Book",
 		"pk": 1,
 		"fields":{
 			"bookName": "The Simarillion",
-			"bookAuthor": "J R R Tolkien"
+			"bookAuthor": 1
 		}
 	},
 	{
@@ -12,15 +52,15 @@
 		"pk": 2,
 		"fields":{
 			"bookName": "Song of Myself",
-			"bookAuthor": "Walter Whitman"
+			"bookAuthor": 2
 		}
 	},
 	{
 		"model": "librarycore.Book",
 		"pk": 3,
 		"fields":{
-			"bookName": "The Satanic Verses",
-			"bookAuthor": "Salman Rushdie"
+			"bookName": "A Boy's Will",
+			"bookAuthor": 3
 		}
 	},
 	{
@@ -28,7 +68,7 @@
 		"pk": 4,
 		"fields":{
 			"bookName": "Leonardo Da Vinci",
-			"bookAuthor": "Walter Isaacson"
+			"bookAuthor": 4
 		}
 	},
 	{
@@ -36,14 +76,14 @@
 		"pk": 5,
 		"fields":{
 			"bookName": "The Da Vinci Code",
-			"bookAuthor": "Dan Brown"
+			"bookAuthor": 5
 		}
 	},
 	{
 		"model": "librarycore.BookInstance",
 		"pk": "d58c01cc-e731-4ecf-b7b0-e6c28e885d00",
 		"fields":{
-			"instanceBook": 5,
+			"instanceBook": 1,
 			"instanceType": "PB"
 		}
 	},
@@ -51,7 +91,7 @@
 		"model": "librarycore.BookInstance",
 		"pk": "24f1b47c-539b-47cc-a09d-2a889b99a0b9",
 		"fields":{
-			"instanceBook": 5,
+			"instanceBook": 2,
 			"instanceType": "AB"
 		}
 	},
@@ -59,7 +99,7 @@
 		"model": "librarycore.BookInstance",
 		"pk": "a821b4ad-4ba3-4c9e-a1c2-0f5cb4feb793",
 		"fields":{
-			"instanceBook": 5,
+			"instanceBook": 3,
 			"instanceType": "EB"
 		}
 	}

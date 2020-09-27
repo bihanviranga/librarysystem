@@ -2,9 +2,13 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 
+class Author(models.Model):
+    authorName = models.CharField(max_length=100)
+    authorDescription = models.TextField(blank=True)
+
 class Book(models.Model):
     bookName = models.CharField(max_length=100)
-    bookAuthor = models.CharField(max_length=100)
+    bookAuthor = models.ForeignKey('Author', null=True, default=None, on_delete=models.SET_NULL)
     bookDescription = models.TextField(blank=True)
 
 class BookInstance(models.Model):
