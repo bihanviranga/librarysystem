@@ -39,6 +39,16 @@ def getUser(n, admin=False):
         user.groups.add(group)
     return user
 
+def getAuthor(n):
+    authors = []
+    for i in range(n):
+        author = models.Author.objects.create(authorName=f'testingAuthor{i}')
+        authors.append(author)
+    if n == 1:
+        return authors[0]
+    else:
+        return authors
+
 class LibraryTestCase(TestCase):
     loggedIn = False
     user = None
@@ -375,4 +385,12 @@ class AuthorViewTests(LibraryTestCase):
         response = self.client.get(url)
 
         self.assertEquals(response.context['currentNav'], 'authors')
+
+    def test_authorListPageShowsAuthorsList(self):
+        authors = getAuthor(2)
+        url = reverse('authors')
+        response = self.client.get(url)
+
+        self.assertContains(response, authors[0].authorName)
+        self.assertContains(response, authors[1].authorName)
 
