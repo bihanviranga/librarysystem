@@ -176,3 +176,15 @@ class BookInstanceReturn(UserIsAdminMixin, View):
         bookInstance.save()
         return redirect('instance-detail', request.POST['bookInstanceId'])
 
+class AuthorList(View):
+    def get(self, request):
+        authors = models.Author.objects.all()
+        contextAuthors = []
+        for author in authors:
+            authorDict = author.__dict__
+            authorDict['numBooks'] = models.Book.objects.filter(bookAuthor=author).count()
+            contextAuthors.append(authorDict)
+
+        context = {'authors': contextAuthors, 'currentNav': 'authors'}
+        return render(request, 'librarycore/authors.html', context)
+

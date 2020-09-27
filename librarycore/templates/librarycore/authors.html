@@ -1,0 +1,26 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}Authors{% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col">
+			Name
+		</div>
+		<div class="col">
+			Number of books
+		</div>
+	</div>
+	{% for author in authors %}
+	<div class="row">
+		<div class="col">
+			{{author.authorName}}
+		</div>
+		<div class="col">
+			{{author.numBooks}}
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

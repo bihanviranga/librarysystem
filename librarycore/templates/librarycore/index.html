@@ -31,14 +31,16 @@
 					<a class="nav-link" href="{% url 'books' %}">Books {% if currentNav == 'books' %}<span
 							class="sr-only">(current)</span>{% endif %}</a>
 				</li>
-				{% for group in user.groups.all %}
-				{% if group.name == 'library_admins' %}
+				<li class="nav-item {% if currentNav == 'authors' %}active{% endif %}">
+					<a class="nav-link" href="{% url 'authors' %}">Authors {% if currentNav == 'authors' %}<span
+							class="sr-only">(current)</span>{% endif %}</a>
+				</li>
+				{% for group in user.groups.all %} {% if group.name == 'library_admins' %}
 				<li class="nav-item {% if currentNav == 'users' %}active{% endif %}">
 					<a class="nav-link" href="{% url 'users' %}">Users {% if currentNav == 'users' %}<span
 							class="sr-only">(current)</span>{% endif %}</a>
 				</li>
-				{% endif %}
-				{% endfor %}
+				{% endif %} {% endfor %}
 			</ul>
 			<ul class="navbar-nav ml-auto">
 				{% if user.is_authenticated %}

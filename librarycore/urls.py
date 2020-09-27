@@ -23,4 +23,6 @@ urlpatterns = [
     path('bookinstances/<str:pk>/update/', views.BookInstanceUpdate.as_view(), name='instance-update'),
     path('bookinstances/borrow', views.BookInstanceBorrow.as_view(), name='instance-borrow'),
     path('bookinstances/return', views.BookInstanceReturn.as_view(), name='instance-return'),
+
+    path('authors/', views.AuthorList.as_view(), name='authors'),
 ]

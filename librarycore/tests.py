@@ -211,7 +211,6 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(instance.borrowedBy.username, borrowingUser.username)
 
-    # TODO: think of a better name for this test?
     def test_adminCanMarkBookInstancesAsReturned(self):
         self.loggedIn = self.createUserAndLogin(1, True)
         user = getUser(2)
@@ -368,4 +367,12 @@ class UserTests(LibraryTestCase):
 
         self.assertTrue(self.loggedIn)
         self.assertEquals(list(userBorrowedBooks), list(response.context['borrowedBooks']))
+
+@tag('author')
+class AuthorViewTests(LibraryTestCase):
+    def test_authorListPageHasCurrentNavSet(self):
+        url = reverse('authors')
+        response = self.client.get(url)
+
+        self.assertEquals(response.context['currentNav'], 'authors')
 
