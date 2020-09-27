@@ -81,7 +81,7 @@ class BookViewTests(LibraryTestCase):
 
         self.assertTrue(self.loggedIn)
         self.assertEqual(bookFromDb.bookName, postDict['bookName'])
-        self.assertEqual(bookFromDb.bookAuthor, postDict['bookAuthor'])
+        self.assertEqual(bookFromDb.bookAuthor.authorName, postDict['bookAuthor'])
 
     def test_booksPageHasCurrentNavSet(self):
         url = reverse('books')

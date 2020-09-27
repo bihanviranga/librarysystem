@@ -11,6 +11,8 @@
 ### Todo
 - [ ] (ONGOING) Book authors refactor into seperate models.
 - [ ] (ONGOING) Because author was refactored, check every page where author is displayed. (books, book details)
+- [ ] Author page to show information and books
+- [ ] Author CRUD
 - [ ] Testcases for not found views
 - [ ] Read/not read marked in each book.
 - [ ] Book instance types refactor into a seperate models (types can be hardcover, paperback, magazine, etc)

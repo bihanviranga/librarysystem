@@ -61,10 +61,21 @@ class BookUpdate(UserIsAdminMixin, UpdateView):
     success_url = reverse_lazy('books')
     fields = '__all__'
 
-class BooksCreate(UserIsAdminMixin, CreateView):
-    model = models.Book
-    success_url = reverse_lazy('books')
-    fields = '__all__'
+class BooksCreate(UserIsAdminMixin, View):
+    def post(self, request):
+        bookName = request.POST['bookName']
+        bookAuthor = request.POST['bookAuthor']
+        try:
+            authorInstance = models.Author.objects.get(authorName=bookAuthor)
+        except models.Author.DoesNotExist:
+            # display author does not exist msg
+            # ask the user if they want to create author
+            # if yes, redirect to create author page,
+            # else, redirect back to books page.
+            print("Author does not exist")
+            return redirect('books')
+        bookInstance = models.Book.objects.create(bookName=bookName, bookAuthor=authorInstance)
+        return redirect('books')
 
 class BookInstanceCreate(UserIsAdminMixin, View):
     def post(self, request):
