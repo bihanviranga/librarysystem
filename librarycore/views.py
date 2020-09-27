@@ -25,6 +25,7 @@ class Books(View):
         contextBooks = []
         for book in books:
             bookDict = book.__dict__
+            bookDict['bookAuthor'] = book.bookAuthor.authorName
             bookDict['count'] = models.BookInstance.objects.filter(instanceBook=book).count()
             bookDict['numAvailable'] = models.BookInstance.objects.filter(instanceBook=book).filter(borrowedBy=None).count()
             bookDict['numBorrowed'] = bookDict['count'] - bookDict['numAvailable']
