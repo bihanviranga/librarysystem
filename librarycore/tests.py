@@ -6,6 +6,7 @@ from django.contrib.auth.models import User, Group
 from librarycore import models
 
 # TODO: Test NotFound errors in GET and DELETE and UPDATE
+# TODO: getUser and getAuthor - should they be getUsers() and getAuthors() [plural] ?
 
 # TODO: getBooks with author or without author? add parameter.
 def getBooks(count):
@@ -376,7 +377,7 @@ class UserTests(LibraryTestCase):
         userBorrowedBooks = models.BookInstance.objects.filter(borrowedBy__username=borrowingUser.username)
 
         self.assertTrue(self.loggedIn)
-        self.assertEquals(list(userBorrowedBooks), list(response.context['borrowedBooks']))
+        self.assertEqual(list(userBorrowedBooks), list(response.context['borrowedBooks']))
 
 @tag('author')
 class AuthorViewTests(LibraryTestCase):
@@ -384,7 +385,7 @@ class AuthorViewTests(LibraryTestCase):
         url = reverse('authors')
         response = self.client.get(url)
 
-        self.assertEquals(response.context['currentNav'], 'authors')
+        self.assertEqual(response.context['currentNav'], 'authors')
 
     def test_authorListPageShowsAuthorsList(self):
         authors = getAuthor(2)
@@ -399,7 +400,7 @@ class AuthorViewTests(LibraryTestCase):
         url = reverse('author-detail', args=[author.id])
         response = self.client.get(url)
 
-        self.assertEquals(response.context['author'], author)
+        self.assertEqual(response.context['author'], author)
 
     def test_authorDetailsPageShowsAuthorBooks(self):
         books = getBooks(2)
@@ -411,5 +412,31 @@ class AuthorViewTests(LibraryTestCase):
         url = reverse('author-detail', args=[author.id])
         response = self.client.get(url)
 
-        self.assertEquals(list(response.context['books']), list(books))
+        self.assertEqual(list(response.context['books']), list(books))
+
+    def test_createAuthorPostRequestAsNormalUser(self):
+        self.loggedIn = self.createUserAndLogin(1)
+
+        authors = getAuthor(2)
+        url = reverse('author-create')
+        postDict = {'authorName': 'fakeAuthorName'}
+        response = self.client.post(url, postDict)
+
+        authorsFromDb = models.Author.objects.filter(authorName='fakeAuthorName')
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(authorsFromDb.count(), 0)
+
+    def test_createAuthorPostRequestAsAdmin(self):
+        self.loggedIn = self.createUserAndLogin(1, True)
+
+        authors = getAuthor(2)
+        url = reverse('author-create')
+        postDict = {'authorName': 'fakeAuthorName'}
+        response = self.client.post(url, postDict)
+
+        authorsFromDb = models.Author.objects.filter(authorName='fakeAuthorName')
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(authorsFromDb.count(), 1)
 

@@ -9,6 +9,7 @@
 ## Roadmap
 
 ### Todo
+- [ ] Tests - POST request send as both admin and normal user?
 - [ ] Tests - check whether isAdmin is set?
 - [ ] Author CRUD
 - [ ] Trailing slash in URLConf for borrow and return causes error
