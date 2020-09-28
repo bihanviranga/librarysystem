@@ -25,4 +25,5 @@ urlpatterns = [
     path('bookinstances/return', views.BookInstanceReturn.as_view(), name='instance-return'),
 
     path('authors/', views.AuthorList.as_view(), name='authors'),
+    path('authors/<int:pk>/', views.AuthorDetail.as_view(), name='author-detail'),
 ]

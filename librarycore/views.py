@@ -188,3 +188,12 @@ class AuthorList(View):
         context = {'authors': contextAuthors, 'currentNav': 'authors'}
         return render(request, 'librarycore/authors.html', context)
 
+class AuthorDetail(DetailView):
+    model = models.Author
+    context_object_name = 'author'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        authorName = self.get_object().authorName
+        context['books'] = models.Book.objects.filter(bookAuthor__authorName=authorName)
+        return context

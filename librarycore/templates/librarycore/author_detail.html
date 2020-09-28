@@ -1,0 +1,18 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}
+Author - {{author.authorName}}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+	<p>{{author.authorDescription}}</p>
+</div>
+
+<div class="container">
+	<h1>Books by {{author.authorName}}</h1>
+	{% for book in books %}
+	<a href="{% url 'book-detail' book.id %}">{{book.bookName}}</a><br />
+	{% endfor %}
+</div>
+{% endblock %}
