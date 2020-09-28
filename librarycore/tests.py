@@ -394,3 +394,22 @@ class AuthorViewTests(LibraryTestCase):
         self.assertContains(response, authors[0].authorName)
         self.assertContains(response, authors[1].authorName)
 
+    def test_authorDetailsPageShowsAuthorDetails(self):
+        author = getAuthor(1)
+        url = reverse('author-detail', args=[author.id])
+        response = self.client.get(url)
+
+        self.assertEquals(response.context['author'], author)
+
+    def test_authorDetailsPageShowsAuthorBooks(self):
+        books = getBooks(2)
+        author = getAuthor(1)
+        books[0].bookAuthor = books[1].bookAuthor = author
+        books[0].save()
+        books[1].save()
+
+        url = reverse('author-detail', args=[author.id])
+        response = self.client.get(url)
+
+        self.assertEquals(list(response.context['books']), list(books))
+
