@@ -6,7 +6,6 @@ from django.contrib.auth.models import User, Group
 from librarycore import models
 
 # TODO: Test NotFound errors in GET and DELETE and UPDATE
-# TODO: getUser and getAuthor - should they be getUsers() and getAuthors() [plural] ?
 
 # TODO: getBooks with author or without author? add parameter.
 def getBooks(count):
@@ -33,14 +32,14 @@ def getBookInstances(count, book):
     else:
         return bookInstances
 
-def getUser(n, admin=False):
+def getUsers(n, admin=False):
     user = User.objects.create_user(f'testingUser{n}', f'testingUser{n}@email.com', f'testingPassword{n}')
     if admin:
         group = Group.objects.get_or_create(name='library_admins')[0]
         user.groups.add(group)
     return user
 
-def getAuthor(n):
+def getAuthors(n):
     authors = []
     for i in range(n):
         author = models.Author.objects.create(authorName=f'testingAuthor{i}')
@@ -55,7 +54,7 @@ class LibraryTestCase(TestCase):
     user = None
 
     def createUserAndLogin(self, n, admin=False):
-        user = getUser(n, admin)
+        user = getUsers(n, admin)
         self.user = user
         loggedIn = self.client.login(username=f'testingUser{n}', password=f'testingPassword{n}')
         return loggedIn
@@ -116,7 +115,7 @@ class BookViewTests(LibraryTestCase):
     def test_booksPageShowsBooksCounts(self):
         book = getBooks(1)
         instances = getBookInstances(5, book)
-        user = getUser(1)
+        user = getUsers(1)
         instances[0].borrowedBy = user
         instances[0].save()
         instances[1].borrowedBy = user
@@ -190,7 +189,7 @@ class BookInstanceViewTests(LibraryTestCase):
 
     def test_adminCanMarkInstancesAsBorrowed(self):
         self.loggedIn = self.createUserAndLogin(1, True)
-        borrowingUser = getUser(2)
+        borrowingUser = getUsers(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
 
@@ -205,8 +204,8 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertEqual(instance.borrowedBy.username, borrowingUser.username)
 
     def test_adminCannotBorrowAlreadyBorrowedBookInstances(self):
-        borrowingUser = getUser(1)
-        borrowingUser2 = getUser(2)
+        borrowingUser = getUsers(1)
+        borrowingUser2 = getUsers(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
         instance.borrowedBy = borrowingUser
@@ -224,7 +223,7 @@ class BookInstanceViewTests(LibraryTestCase):
 
     def test_adminCanMarkBookInstancesAsReturned(self):
         self.loggedIn = self.createUserAndLogin(1, True)
-        user = getUser(2)
+        user = getUsers(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
         instance.borrowedBy = user
@@ -255,7 +254,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_userCanSeeWhetherInstanceIsBorrowed(self):
         book = getBooks(1)
         instance1, instance2 = getBookInstances(2, book)
-        borrowingUser = getUser(1)
+        borrowingUser = getUsers(1)
         instance1.borrowedBy = borrowingUser
         instance1.save()
 
@@ -274,7 +273,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_adminCanSeeWhoBorrowedInstance(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
-        borrowingUser = getUser(1)
+        borrowingUser = getUsers(1)
         instance.borrowedBy = borrowingUser
         instance.save()
 
@@ -289,7 +288,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_normalUsersCannotSeeWhoBorrowedInstance(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
-        borrowingUser = getUser(1)
+        borrowingUser = getUsers(1)
         instance.borrowedBy = borrowingUser
         instance.save()
 
@@ -350,7 +349,7 @@ class UserTests(LibraryTestCase):
     def test_userCannotSeeOtherUserBorrowedBooks(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
-        borrowingUser = getUser(1)
+        borrowingUser = getUsers(1)
         instance.borrowedBy = borrowingUser
         instance.save()
 
@@ -365,7 +364,7 @@ class UserTests(LibraryTestCase):
     def test_adminCanSeeUserBorrowedBooks(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
-        borrowingUser = getUser(1)
+        borrowingUser = getUsers(1)
         instance.borrowedBy = borrowingUser
         instance.save()
 
@@ -388,7 +387,7 @@ class AuthorViewTests(LibraryTestCase):
         self.assertEqual(response.context['currentNav'], 'authors')
 
     def test_authorListPageShowsAuthorsList(self):
-        authors = getAuthor(2)
+        authors = getAuthors(2)
         url = reverse('authors')
         response = self.client.get(url)
 
@@ -396,7 +395,7 @@ class AuthorViewTests(LibraryTestCase):
         self.assertContains(response, authors[1].authorName)
 
     def test_authorDetailsPageShowsAuthorDetails(self):
-        author = getAuthor(1)
+        author = getAuthors(1)
         url = reverse('author-detail', args=[author.id])
         response = self.client.get(url)
 
@@ -404,7 +403,7 @@ class AuthorViewTests(LibraryTestCase):
 
     def test_authorDetailsPageShowsAuthorBooks(self):
         books = getBooks(2)
-        author = getAuthor(1)
+        author = getAuthors(1)
         books[0].bookAuthor = books[1].bookAuthor = author
         books[0].save()
         books[1].save()
@@ -417,7 +416,7 @@ class AuthorViewTests(LibraryTestCase):
     def test_createAuthorPostRequestAsNormalUser(self):
         self.loggedIn = self.createUserAndLogin(1)
 
-        authors = getAuthor(2)
+        authors = getAuthors(2)
         url = reverse('author-create')
         postDict = {'authorName': 'fakeAuthorName'}
         response = self.client.post(url, postDict)
@@ -430,7 +429,7 @@ class AuthorViewTests(LibraryTestCase):
     def test_createAuthorPostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
-        authors = getAuthor(2)
+        authors = getAuthors(2)
         url = reverse('author-create')
         postDict = {'authorName': 'fakeAuthorName'}
         response = self.client.post(url, postDict)
