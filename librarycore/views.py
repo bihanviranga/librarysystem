@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import DeleteView, DetailView, UpdateView, CreateView, ListView
+from django.views.generic import DeleteView, DetailView, UpdateView, ListView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -186,6 +186,10 @@ class AuthorList(View):
             contextAuthors.append(authorDict)
 
         context = {'authors': contextAuthors, 'currentNav': 'authors'}
+
+        if isUserAdmin(request.user):
+            context['isAdmin'] = True
+
         return render(request, 'librarycore/authors.html', context)
 
 class AuthorDetail(DetailView):
@@ -197,3 +201,10 @@ class AuthorDetail(DetailView):
         authorName = self.get_object().authorName
         context['books'] = models.Book.objects.filter(bookAuthor__authorName=authorName)
         return context
+
+class AuthorCreate(UserIsAdminMixin, View):
+    def post(self, request):
+        authorName = request.POST['authorName']
+        models.Author.objects.create(authorName=authorName)
+        return redirect('authors')
+

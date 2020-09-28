@@ -9,7 +9,7 @@
 ## Roadmap
 
 ### Todo
-- [ ] Author page to show information and books
+- [ ] Tests - check whether isAdmin is set?
 - [ ] Author CRUD
 - [ ] Trailing slash in URLConf for borrow and return causes error
 - [ ] Testcases for not found views
@@ -18,6 +18,7 @@
 - [ ] User rate books.
 
 ### Done
+- [X] Author page to show information and books
 - [X] Because author was refactored, check every page where author is displayed. (books, book details)
 - [X] Book authors refactor into seperate models.
 - [X] Instance list views shows borrowed/not borrowed.

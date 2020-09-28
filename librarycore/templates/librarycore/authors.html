@@ -3,6 +3,23 @@
 {% block maintitle %}Authors{% endblock %}
 
 {% block content %}
+{% if isAdmin %}
+<div class="container" style="margin-bottom: 2em;">
+	<div class="row">
+		<div class="col-1">
+			<button class="btn btn-success" id="btnAuthorNewShow" onclick="authorNewToggle()">New</button>
+		</div>
+		<div class="col" id="formAuthorNew" hidden="true">
+			<form method="POST" action="{% url 'author-create' %}">
+				{% csrf_token %}
+				<input type="text" name="authorName" id="txtAuthorName" placeholder="Author name" />
+				<button class="btn btn-primary">Add</button>
+			</form>
+		</div>
+	</div>
+</div>
+{% endif %}
+
 <div class="container">
 	<div class="row">
 		<div class="col">
@@ -23,4 +40,14 @@
 	</div>
 	{% endfor %}
 </div>
+
+{% if isAdmin %}
+<script>
+	function authorNewToggle() {
+		$("#btnAuthorNewShow").attr("hidden", true);
+		$("#formAuthorNew").attr("hidden", false);
+		$("#txtAuthorName").focus();
+	}
+</script>
+{% endif %}
 {% endblock %}
