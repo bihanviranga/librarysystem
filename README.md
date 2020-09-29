@@ -9,6 +9,7 @@
 ## Roadmap
 
 ### Todo
+- [ ] Since control tests are making it large, refactor tests into multiple files?
 - [ ] Tests for DELETE, UPDATE
 - [ ] Tests - POST request send as both admin and normal user?
 - [ ] Author CRUD (Done so far: Create, Retrieve)

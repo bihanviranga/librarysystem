@@ -215,6 +215,7 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertFalse(self.loggedIn)
         self.assertEqual(instancesFromDb, 0)
 
+    # TODO: Control tests : as normal user, and without logging in
     def test_updateBookInstancePostRequest(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
@@ -239,6 +240,7 @@ class BookInstanceViewTests(LibraryTestCase):
 
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
 
+    # TODO: control tests
     def test_adminCanMarkInstancesAsBorrowed(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
@@ -468,7 +470,7 @@ class AuthorViewTests(LibraryTestCase):
 
         self.assertEqual(list(response.context['books']), list(books))
 
-    def test_createAuthorPostRequestAsNormalUser(self):
+    def test_createAuthorPostRequestAsUser(self):
         self.loggedIn = self.createUserAndLogin(1)
 
         authors = getAuthors(2)
@@ -493,4 +495,15 @@ class AuthorViewTests(LibraryTestCase):
 
         self.assertTrue(self.loggedIn)
         self.assertEqual(authorsFromDb.count(), 1)
+
+    def test_createAuthorPostRequestWithoutLogin(self):
+        authors = getAuthors(2)
+        url = reverse('author-create')
+        postDict = {'authorName': 'fakeAuthorName'}
+        response = self.client.post(url, postDict)
+
+        authorsFromDb = models.Author.objects.filter(authorName='fakeAuthorName')
+
+        self.assertFalse(self.loggedIn)
+        self.assertEqual(authorsFromDb.count(), 0)
 
