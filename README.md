@@ -9,6 +9,7 @@
 ## Roadmap
 
 ### Todo
+- [ ] Tests for DELETE, UPDATE
 - [ ] Tests - POST request send as both admin and normal user?
 - [ ] Author CRUD (Done so far: Create, Retrieve)
 - [ ] Trailing slash in URLConf for borrow and return causes error

@@ -106,7 +106,7 @@ class BookViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(booksInDb, 0)
 
-    def test_createBookPostRequestWithoutLoggingIn(self):
+    def test_createBookPostRequestWithoutLogin(self):
         author = models.Author.objects.create(authorName='testingAuthor')
 
         url = reverse('book-create')
@@ -180,7 +180,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def setup(self):
         setup_test_environment()
 
-    def test_createBookInstancePostRequest(self):
+    def test_createBookInstancePostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
         book1 = getBooks(1)
@@ -192,6 +192,28 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(instanceFromDb.instanceType, postDict['instanceType'])
         self.assertEqual(instanceFromDb.instanceBook, book1)
+
+    def test_createBookInstancePostRequestAsUser(self):
+        self.loggedIn = self.createUserAndLogin(1)
+
+        book1 = getBooks(1)
+        url = reverse('instance-create')
+        postDict = {'instanceType': random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES[0]), 'bookId': str(book1.id)}
+        response = self.client.post(url, postDict)
+        instancesFromDb = models.BookInstance.objects.all().count()
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(instancesFromDb, 0)
+
+    def test_createBookInstancePostRequestWithoutLogin(self):
+        book1 = getBooks(1)
+        url = reverse('instance-create')
+        postDict = {'instanceType': random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES[0]), 'bookId': str(book1.id)}
+        response = self.client.post(url, postDict)
+        instancesFromDb = models.BookInstance.objects.all().count()
+
+        self.assertFalse(self.loggedIn)
+        self.assertEqual(instancesFromDb, 0)
 
     def test_updateBookInstancePostRequest(self):
         self.loggedIn = self.createUserAndLogin(1, True)
