@@ -96,20 +96,24 @@ class BookViewTests(LibraryTestCase):
     def test_booksPageHasCurrentNavSet(self):
         url = reverse('books')
         response = self.client.get(url)
+
         self.assertEqual(response.context['currentNav'], 'books')
 
     def test_bookDetailPageHasBookInstances(self):
         book1 = getBooks(1)
         instances = getBookInstances(3, book1)
+
         url = reverse('book-detail', args=[book1.id])
         response = self.client.get(url)
         querysetFromContext = list(response.context['instances'])
+
         self.assertEqual(querysetFromContext, instances)
 
     def test_bookDetailPageHasBookInstanceTypes(self):
         book1 = getBooks(1)
         url = reverse('book-detail', args=[book1.id])
         response = self.client.get(url)
+
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
 
     def test_booksPageShowsBooksCounts(self):
@@ -123,7 +127,6 @@ class BookViewTests(LibraryTestCase):
 
         url = reverse('books')
         response = self.client.get(url)
-
         bookFromResponse = response.context['books'][0]
 
         self.assertEqual(bookFromResponse['count'], 5)
@@ -171,6 +174,7 @@ class BookInstanceViewTests(LibraryTestCase):
 
         book1 = getBooks(1)
         instance1 = getBookInstances(1, book1)
+
         url = reverse('instance-update', args=[instance1.instanceSerialNum])
         postInstanceType = random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES)[0]
         postDict = {'instanceSerialNum': instance1.instanceSerialNum, 'instanceType': postInstanceType}
@@ -183,12 +187,15 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_bookInstancePageHasInstanceTypes(self):
         book1 = getBooks(1)
         instance = getBookInstances(1, book1)
+
         url = reverse('instance-detail', args=[instance.instanceSerialNum])
         response = self.client.get(url)
+
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
 
     def test_adminCanMarkInstancesAsBorrowed(self):
         self.loggedIn = self.createUserAndLogin(1, True)
+
         borrowingUser = getUsers(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
@@ -258,7 +265,7 @@ class BookInstanceViewTests(LibraryTestCase):
         instance1.borrowedBy = borrowingUser
         instance1.save()
 
-        self.loggedIn = self.createUserAndLogin(2, True)
+        self.loggedIn = self.createUserAndLogin(2)
 
         url1 = reverse('instance-detail', args=[instance1.instanceSerialNum])
         response1 = self.client.get(url1)
@@ -283,6 +290,7 @@ class BookInstanceViewTests(LibraryTestCase):
         response = self.client.get(url)
 
         self.assertTrue(self.loggedIn)
+        self.assertTrue(response.context['isAdmin'])
         self.assertEquals(response.context['borrowedBy'], borrowingUser.username)
 
     def test_normalUsersCannotSeeWhoBorrowedInstance(self):
@@ -305,7 +313,7 @@ class UserTests(LibraryTestCase):
     def setup(self):
         setup_test_environment()
 
-    def test_accessUsersPageAsNormalUser(self):
+    def test_cannotAccessUsersPageAsNormalUser(self):
         self.loggedIn = self.createUserAndLogin(1)
 
         usersUrl = reverse('users')
@@ -314,22 +322,23 @@ class UserTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(usersResponse.status_code, 403)
 
-    def test_accessUsersPageWithoutLogin(self):
+    def test_cannotAccessUsersPageWithoutLogin(self):
         loginUrl = reverse('login')
         usersUrl = reverse('users')
         response = self.client.get(usersUrl)
+
         self.assertFalse(self.loggedIn)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, f'{loginUrl}?next={usersUrl}')
 
-    def test_accessUsersPageAsAdmin(self):
+    def test_canAccessUsersPageAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
-        usersUrl = reverse('users')
-        usersResponse = self.client.get(usersUrl)
+        url = reverse('users')
+        response = self.client.get(url)
 
         self.assertTrue(self.loggedIn)
-        self.assertEqual(usersResponse.status_code, 200)
+        self.assertEqual(response.status_code, 200)
 
     def test_userCanSeeOwnBorrowedBooks(self):
         book = getBooks(1)
