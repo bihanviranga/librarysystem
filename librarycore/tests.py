@@ -79,7 +79,7 @@ class BookViewTests(LibraryTestCase):
     def setup(self):
         setup_test_environment()
 
-    def test_createBookPostRequest(self):
+    def test_createBookPostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
         author = models.Author.objects.create(authorName='testingAuthor')
@@ -92,6 +92,30 @@ class BookViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(bookFromDb.bookName, postDict['bookName'])
         self.assertEqual(bookFromDb.bookAuthor.authorName, postDict['bookAuthor'])
+
+    def test_createBookPostRequestAsUser(self):
+        self.loggedIn = self.createUserAndLogin(1)
+
+        author = models.Author.objects.create(authorName='testingAuthor')
+
+        url = reverse('book-create')
+        postDict = {'bookName':'testingBook', 'bookAuthor':'testingAuthor', 'bookDescription':'testingDescription'}
+        response = self.client.post(url, postDict)
+        booksInDb = models.Book.objects.all().count()
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(booksInDb, 0)
+
+    def test_createBookPostRequestWithoutLoggingIn(self):
+        author = models.Author.objects.create(authorName='testingAuthor')
+
+        url = reverse('book-create')
+        postDict = {'bookName':'testingBook', 'bookAuthor':'testingAuthor', 'bookDescription':'testingDescription'}
+        response = self.client.post(url, postDict)
+        booksInDb = models.Book.objects.all().count()
+
+        self.assertFalse(self.loggedIn)
+        self.assertEqual(booksInDb, 0)
 
     def test_booksPageHasCurrentNavSet(self):
         url = reverse('books')
