@@ -1,15 +1,24 @@
 # Django library management system
 
-## Testing
+## Installation
+- Create a virtual environment: `python -m virtualenv venv`
+- Activate it: `source venv/bin/activate`
+- Install dependencies: `pip install -r requirements.txt`
+- Migrate the database: `python manage.py migrate`
+- Load the sample data: `python manage.py loaddata sampledata.json`
+- Run the server: `python manage.py runserver`
 
+## Testing
 - Run tests with `python manage.py test`
-- Tests are tagged as general, book, book-instance, user.
+- Tests are tagged as general, book, book-instance, user, author.
 - Run a specific group of tests with `python manage.py test --tag=general`
+
+## Admin users
+- Until User CRUD functions are finished, make a user manually and add him to 'library_admins' group.
 
 ## Roadmap
 
 ### Todo
-- [ ] Since control tests are making it large, refactor tests into multiple files?
 - [ ] Tests for DELETE, UPDATE
 - [ ] Tests - POST request send as both admin and normal user?
 - [ ] Author CRUD (Done so far: Create, Retrieve)
@@ -20,19 +29,13 @@
 - [ ] User rate books.
 
 ### Done
+- [X] Since control tests are making it large, refactor tests into multiple files?
 - [X] Author page to show information and books
 - [X] Because author was refactored, check every page where author is displayed. (books, book details)
 - [X] Book authors refactor into seperate models.
-- [X] Instance list views shows borrowed/not borrowed.
 - [X] Since Books is not a list view anymore, test it!
-- [X] Book list view shows how many available or not.
-- [X] Normal users cannot mark books as borrowed.
-- [X] Admins can mark books as borrowed/returned.
-- [X] Users can see the books they have borrowed.
-- [X] Admins can see who borrowed books.
-- [X] Normal users can see whether a book is borrowed or not.
-- [X] All users can borrow books.
-- [X] Users can return borrowed books.
+- [X] Borrowed/Available status on book instances
+- [X] Borrow/Return functionality
 - [X] Normal users who can view books and instances
 - [X] Admin users who can CRUD books and instances
 - [X] Admins can see a list of normal users.
