@@ -5,10 +5,18 @@ from librarycore import models
 from .libraryTestCase import LibraryTestCase
 from .helpers import *
 
-@tag('book')
-class BookViewTests(LibraryTestCase):
+@tag('book', 'book-crud')
+class BookViewCrudTest(LibraryTestCase):
     def setup(self):
         setup_test_environment()
+
+    def test_bookDetailsPageShowsBookInformation(self):
+        book = getBooks(1)
+        url = reverse('book-detail', args=[book.id])
+        response = self.client.get(url)
+
+        self.assertContains(response, book.bookName)
+        self.assertContains(response, book.bookAuthor.authorName)
 
     def test_createBookPostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
@@ -47,6 +55,29 @@ class BookViewTests(LibraryTestCase):
 
         self.assertFalse(self.loggedIn)
         self.assertEqual(booksInDb, 0)
+
+    def test_updateBookPostRequestAsAdmin(self):
+        self.fail()
+
+    def test_updateBookPostRequestAsUser(self):
+        self.fail()
+
+    def test_updateBookPostRequestWithoutLogin(self):
+        self.fail()
+
+    def test_deleteBookPostRequestAsAdmin(self):
+        self.fail();
+
+    def test_deleteBookPostRequestAsUser(self):
+        self.fail();
+
+    def test_deleteBookPostRequestWithoutLogin(self):
+        self.fail();
+
+@tag('book')
+class BookViewTests(LibraryTestCase):
+    def setup(self):
+        setup_test_environment()
 
     def test_booksPageHasCurrentNavSet(self):
         url = reverse('books')
@@ -98,11 +129,4 @@ class BookViewTests(LibraryTestCase):
         self.assertContains(response, books[1].bookName)
         self.assertContains(response, books[1].bookAuthor.authorName)
 
-    def test_bookDetailsPageShowsBookInformation(self):
-        book = getBooks(1)
-        url = reverse('book-detail', args=[book.id])
-        response = self.client.get(url)
-
-        self.assertContains(response, book.bookName)
-        self.assertContains(response, book.bookAuthor.authorName)
 

@@ -4,10 +4,14 @@ from django.urls import reverse
 from .libraryTestCase import LibraryTestCase
 from .helpers import *
 
-@tag('book-instance')
-class BookInstanceViewTests(LibraryTestCase):
+@tag('book-instance', 'book-instance-crud')
+class BookInstanceViewCrudTests(LibraryTestCase):
     def setup(self):
         setup_test_environment()
+
+    def test_viewBookInstanceDetails(self):
+        # if the admin can see addition details, test them too
+        self.fail()
 
     def test_createBookInstancePostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
@@ -45,7 +49,7 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertEqual(instancesFromDb, 0)
 
     # TODO: Control tests : as normal user, and without logging in
-    def test_updateBookInstancePostRequest(self):
+    def test_updateBookInstancePostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
         book1 = getBooks(1)
@@ -59,6 +63,27 @@ class BookInstanceViewTests(LibraryTestCase):
 
         self.assertTrue(self.loggedIn)
         self.assertEqual(instanceFromDb.instanceType, postDict['instanceType'])
+
+    def test_updateBookInstancePostRequestAsUser(self):
+        self.fail()
+
+    def test_updateBookInstancePostRequestWithoutLogin(self):
+        self.fail()
+
+    def test_deleteBookInstancePostRequestAsAdmin(self):
+        self.fail()
+
+    def test_deleteBookInstancePostRequestAsUser(self):
+        self.fail()
+
+    def test_deleteBookInstancePostRequestWithoutLogin(self):
+        self.fail()
+
+@tag('book-instance')
+class BookInstanceViewTests(LibraryTestCase):
+    def setup(self):
+        setup_test_environment()
+
 
     def test_bookInstancePageHasInstanceTypes(self):
         book1 = getBooks(1)
