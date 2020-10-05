@@ -1,4 +1,5 @@
 # Django library management system
+[![Build Status](https://travis-ci.org/bihanviranga/librarysystem.svg?branch=master)](https://travis-ci.org/bihanviranga/librarysystem)
 
 ## Installation
 - Create a virtual environment: `python -m virtualenv venv`
