@@ -57,13 +57,56 @@ class BookViewCrudTest(LibraryTestCase):
         self.assertEqual(booksInDb, 0)
 
     def test_updateBookPostRequestAsAdmin(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1, True)
+
+        book1 = getBooks(1)
+        author2 = models.Author.objects.create(authorName="updatedAuthor")
+
+        url = reverse('book-update', args=[book1.id])
+        postDict = {"id":book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.id}
+        response = self.client.post(url, postDict)
+
+        book1 = models.Book.objects.get(pk=book1.id)
+
+        self.assertEqual(book1.bookName, postDict['bookName'])
+        self.assertEqual(book1.bookDescription, postDict['bookDescription'])
+        self.assertEqual(book1.bookAuthor.authorName, author2.authorName)
 
     def test_updateBookPostRequestAsUser(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1)
+
+        book1 = getBooks(1)
+        origBookName = book1.bookName
+        origBookDescription = book1.bookDescription
+        origBookAuthorName = book1.bookAuthor.authorName
+        author2 = models.Author.objects.create(authorName="updatedAuthor")
+
+        url = reverse('book-update', args=[book1.id])
+        postDict = {"id": book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.id}
+        response = self.client.post(url, postDict)
+
+        book1 = models.Book.objects.get(pk=book1.id)
+
+        self.assertEqual(book1.bookName, origBookName)
+        self.assertEqual(book1.bookDescription, origBookDescription)
+        self.assertEqual(book1.bookAuthor.authorName, origBookAuthorName)
 
     def test_updateBookPostRequestWithoutLogin(self):
-        self.fail()
+        book1 = getBooks(1)
+        origBookName = book1.bookName
+        origBookDescription = book1.bookDescription
+        origBookAuthorName = book1.bookAuthor.authorName
+        author2 = models.Author.objects.create(authorName="updatedAuthor")
+
+        url = reverse('book-update', args=[book1.id])
+        postDict = {"id": book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.id}
+        response = self.client.post(url, postDict)
+
+        book1 = models.Book.objects.get(pk=book1.id)
+
+        self.assertEqual(book1.bookName, origBookName)
+        self.assertEqual(book1.bookDescription, origBookDescription)
+        self.assertEqual(book1.bookAuthor.authorName, origBookAuthorName)
 
     def test_deleteBookPostRequestAsAdmin(self):
         self.fail();
