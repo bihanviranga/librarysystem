@@ -43,17 +43,6 @@ class BookInstanceViewCrudTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(instancesFromDb, 0)
 
-    def test_createBookInstancePostRequestWithoutLogin(self):
-        book1 = getBooks(1)
-        url = reverse('instance-create')
-        postDict = {'instanceType': random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES[0]), 'bookId': str(book1.id)}
-        response = self.client.post(url, postDict)
-        instancesFromDb = models.BookInstance.objects.all().count()
-
-        self.assertFalse(self.loggedIn)
-        self.assertEqual(instancesFromDb, 0)
-
-    # TODO: Control tests : as normal user, and without logging in
     def test_updateBookInstancePostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
@@ -72,16 +61,10 @@ class BookInstanceViewCrudTests(LibraryTestCase):
     def test_updateBookInstancePostRequestAsUser(self):
         self.fail()
 
-    def test_updateBookInstancePostRequestWithoutLogin(self):
-        self.fail()
-
     def test_deleteBookInstancePostRequestAsAdmin(self):
         self.fail()
 
     def test_deleteBookInstancePostRequestAsUser(self):
-        self.fail()
-
-    def test_deleteBookInstancePostRequestWithoutLogin(self):
         self.fail()
 
 @tag('book-instance')
