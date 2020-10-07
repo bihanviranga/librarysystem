@@ -5,10 +5,17 @@ from librarycore import models
 from .libraryTestCase import LibraryTestCase
 from .helpers import *
 
-@tag('book')
-class BookViewTests(LibraryTestCase):
+@tag('book', 'book-crud')
+class BookViewCrudTest(LibraryTestCase):
     def setup(self):
         setup_test_environment()
+
+    def test_bookDetailsPageShowsBookInformation(self):
+        book = getBooks(1)
+        url = reverse('book-detail', args=[book.id])
+        response = self.client.get(url)
+
+        self.assertEqual(response.context['book'], book)
 
     def test_createBookPostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
@@ -37,16 +44,75 @@ class BookViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(booksInDb, 0)
 
-    def test_createBookPostRequestWithoutLogin(self):
-        author = models.Author.objects.create(authorName='testingAuthor')
+    def test_updateBookPostRequestAsAdmin(self):
+        self.loggedIn = self.createUserAndLogin(1, True)
 
-        url = reverse('book-create')
-        postDict = {'bookName':'testingBook', 'bookAuthor':'testingAuthor', 'bookDescription':'testingDescription'}
+        book1 = getBooks(1)
+        author2 = models.Author.objects.create(authorName="updatedAuthor")
+
+        url = reverse('book-update', args=[book1.id])
+        postDict = {"id":book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.id}
         response = self.client.post(url, postDict)
-        booksInDb = models.Book.objects.all().count()
 
-        self.assertFalse(self.loggedIn)
-        self.assertEqual(booksInDb, 0)
+        book1 = models.Book.objects.get(pk=book1.id)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(book1.bookName, postDict['bookName'])
+        self.assertEqual(book1.bookDescription, postDict['bookDescription'])
+        self.assertEqual(book1.bookAuthor.authorName, author2.authorName)
+
+    def test_updateBookPostRequestAsUser(self):
+        self.loggedIn = self.createUserAndLogin(1)
+
+        book1 = getBooks(1)
+        origBookName = book1.bookName
+        origBookDescription = book1.bookDescription
+        origBookAuthorName = book1.bookAuthor.authorName
+        author2 = models.Author.objects.create(authorName="updatedAuthor")
+
+        url = reverse('book-update', args=[book1.id])
+        postDict = {"id": book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.id}
+        response = self.client.post(url, postDict)
+
+        book1 = models.Book.objects.get(pk=book1.id)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(book1.bookName, origBookName)
+        self.assertEqual(book1.bookDescription, origBookDescription)
+        self.assertEqual(book1.bookAuthor.authorName, origBookAuthorName)
+
+    def test_deleteBookPostRequestAsAdmin(self):
+        self.loggedIn = self.createUserAndLogin(1, True)
+
+        books = getBooks(3)
+
+        url = reverse('book-delete', args=[books[0].id])
+        response = self.client.post(url)
+
+        booksFromDb = models.Book.objects.all()
+
+        self.assertTrue(self.loggedIn)
+        self.assertNotIn(books[0], booksFromDb)
+        self.assertEqual(booksFromDb.count(), 2)
+
+    def test_deleteBookPostRequestAsUser(self):
+        self.loggedIn = self.createUserAndLogin(1)
+
+        books = getBooks(3)
+
+        url = reverse('book-delete', args=[books[0].id])
+        response = self.client.post(url)
+
+        booksFromDb = models.Book.objects.all()
+
+        self.assertTrue(self.loggedIn)
+        self.assertIn(books[0], booksFromDb)
+        self.assertEqual(booksFromDb.count(), 3)
+
+@tag('book')
+class BookViewTests(LibraryTestCase):
+    def setup(self):
+        setup_test_environment()
 
     def test_booksPageHasCurrentNavSet(self):
         url = reverse('books')
@@ -88,6 +154,7 @@ class BookViewTests(LibraryTestCase):
         self.assertEqual(bookFromResponse['numAvailable'], 3)
         self.assertEqual(bookFromResponse['numBorrowed'], 2)
 
+    # TODO: change this. Use response.context['books']
     def test_booksPageShowsBookInformation(self):
         books = getBooks(2)
         url = reverse('books')
@@ -98,11 +165,4 @@ class BookViewTests(LibraryTestCase):
         self.assertContains(response, books[1].bookName)
         self.assertContains(response, books[1].bookAuthor.authorName)
 
-    def test_bookDetailsPageShowsBookInformation(self):
-        book = getBooks(1)
-        url = reverse('book-detail', args=[book.id])
-        response = self.client.get(url)
-
-        self.assertContains(response, book.bookName)
-        self.assertContains(response, book.bookAuthor.authorName)
 
