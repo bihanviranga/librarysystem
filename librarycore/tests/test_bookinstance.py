@@ -113,7 +113,6 @@ class BookInstanceViewTests(LibraryTestCase):
     def setup(self):
         setup_test_environment()
 
-
     def test_bookInstancePageHasInstanceTypes(self):
         book1 = getBooks(1)
         instance = getBookInstances(1, book1)
@@ -123,7 +122,6 @@ class BookInstanceViewTests(LibraryTestCase):
 
         self.assertEqual(response.context['instanceTypes'], models.BookInstance.INSTANCE_TYPE_CHOICES)
 
-    # TODO: control tests
     def test_adminCanMarkInstancesAsBorrowed(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
@@ -141,7 +139,24 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(instance.borrowedBy.username, borrowingUser.username)
 
-    def test_adminCannotBorrowAlreadyBorrowedBookInstances(self):
+    def test_userCannotMarkInstancesAsBorrowed(self):
+        self.loggedIn = self.createUserAndLogin(1)
+
+        borrowingUser = getUsers(2)
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+
+        url = reverse('instance-borrow')
+        postDict = {'bookInstanceId': instance.instanceSerialNum, 'borrowingUser': borrowingUser}
+        response = self.client.post(url, postDict)
+
+        # 'refresh' the instance obj
+        instance = models.BookInstance.objects.get(pk=instance.instanceSerialNum)
+
+        self.assertTrue(self.loggedIn)
+        self.assertIsNone(instance.borrowedBy)
+
+    def test_adminCannotBorrowAlreadyBorrowedInstances(self):
         borrowingUser = getUsers(1)
         borrowingUser2 = getUsers(2)
         book = getBooks(1)
@@ -159,7 +174,7 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertEqual(instance.borrowedBy.username, borrowingUser.username)
 
-    def test_adminCanMarkBookInstancesAsReturned(self):
+    def test_adminCanMarkInstancesAsReturned(self):
         self.loggedIn = self.createUserAndLogin(1, True)
         user = getUsers(2)
         book = getBooks(1)
@@ -176,18 +191,22 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertTrue(self.loggedIn)
         self.assertIsNone(instance.borrowedBy)
 
-    def test_cannotBorrowBookInstancesWithoutLogin(self):
+    def test_userCannotMarkInstancesAsReturned(self):
+        self.loggedIn = self.createUserAndLogin(1)
+        user = getUsers(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
+        instance.borrowedBy = user
+        instance.save()
 
-        url = reverse('instance-borrow')
-        postDict = {'bookInstanceId':instance.instanceSerialNum}
+        url = reverse('instance-return')
+        postDict = {'bookInstanceId': instance.instanceSerialNum}
         response = self.client.post(url, postDict)
 
         instance = models.BookInstance.objects.get(pk=instance.instanceSerialNum)
 
-        self.assertFalse(self.loggedIn)
-        self.assertIsNone(instance.borrowedBy)
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(instance.borrowedBy, user)
 
     def test_userCanSeeWhetherInstanceIsBorrowed(self):
         book = getBooks(1)
@@ -224,7 +243,7 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertTrue(response.context['isAdmin'])
         self.assertEquals(response.context['borrowedBy'], borrowingUser.username)
 
-    def test_normalUsersCannotSeeWhoBorrowedInstance(self):
+    def test_usersCannotSeeWhoBorrowedInstance(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
         borrowingUser = getUsers(1)
