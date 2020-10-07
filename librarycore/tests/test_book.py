@@ -109,13 +109,41 @@ class BookViewCrudTest(LibraryTestCase):
         self.assertEqual(book1.bookAuthor.authorName, origBookAuthorName)
 
     def test_deleteBookPostRequestAsAdmin(self):
-        self.fail();
+        self.loggedIn = self.createUserAndLogin(1, True)
+
+        books = getBooks(3)
+
+        url = reverse('book-delete', args=[books[0].id])
+        response = self.client.post(url)
+
+        booksFromDb = models.Book.objects.all()
+
+        self.assertNotIn(books[0], booksFromDb)
+        self.assertEqual(booksFromDb.count(), 2)
 
     def test_deleteBookPostRequestAsUser(self):
-        self.fail();
+        self.loggedIn = self.createUserAndLogin(1)
+
+        books = getBooks(3)
+
+        url = reverse('book-delete', args=[books[0].id])
+        response = self.client.post(url)
+
+        booksFromDb = models.Book.objects.all()
+
+        self.assertIn(books[0], booksFromDb)
+        self.assertEqual(booksFromDb.count(), 3)
 
     def test_deleteBookPostRequestWithoutLogin(self):
-        self.fail();
+        books = getBooks(3)
+
+        url = reverse('book-delete', args=[books[0].id])
+        response = self.client.post(url)
+
+        booksFromDb = models.Book.objects.all()
+
+        self.assertIn(books[0], booksFromDb)
+        self.assertEqual(booksFromDb.count(), 3)
 
 @tag('book')
 class BookViewTests(LibraryTestCase):
