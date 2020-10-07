@@ -10,8 +10,13 @@ class BookInstanceViewCrudTests(LibraryTestCase):
         setup_test_environment()
 
     def test_viewBookInstanceDetails(self):
-        # if the admin can see addition details, test them too
-        self.fail()
+        book = getBooks(1)
+        instance = getBookInstances(1, book)
+
+        url = reverse('instance-detail', args=[instance.instanceSerialNum])
+        response = self.client.get(url)
+
+        self.assertEqual(response.context['bookInstance'], instance)
 
     def test_createBookInstancePostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
