@@ -20,7 +20,6 @@
 ## Roadmap
 
 ### Todo
-- [ ] Do we need the 'without login' test cases?
 - [ ] Tests for DELETE, UPDATE
 - [ ] Tests - POST request send as both admin and normal user?
 - [ ] Author CRUD (Done so far: Create, Retrieve)

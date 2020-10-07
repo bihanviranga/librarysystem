@@ -24,6 +24,7 @@ class BookInstanceViewCrudTests(LibraryTestCase):
         book1 = getBooks(1)
         url = reverse('instance-create')
         postDict = {'instanceType': random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES[0]), 'bookId': str(book1.id)}
+
         response = self.client.post(url, postDict)
         instanceFromDb = models.BookInstance.objects.all()[0]
 
@@ -37,6 +38,7 @@ class BookInstanceViewCrudTests(LibraryTestCase):
         book1 = getBooks(1)
         url = reverse('instance-create')
         postDict = {'instanceType': random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES[0]), 'bookId': str(book1.id)}
+
         response = self.client.post(url, postDict)
         instancesFromDb = models.BookInstance.objects.all().count()
 
@@ -46,12 +48,14 @@ class BookInstanceViewCrudTests(LibraryTestCase):
     def test_updateBookInstancePostRequestAsAdmin(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
-        book1 = getBooks(1)
-        instance1 = getBookInstances(1, book1)
+        book = getBooks(1)
+        # creating instance manually coz we must know what the instanceType is in order to change it.
+        instance = models.BookInstance.objects.create(instanceBook=book, instanceType='AB')
 
-        url = reverse('instance-update', args=[instance1.instanceSerialNum])
-        postInstanceType = random.choice(models.BookInstance.INSTANCE_TYPE_CHOICES)[0]
-        postDict = {'instanceSerialNum': instance1.instanceSerialNum, 'instanceType': postInstanceType}
+        url = reverse('instance-update', args=[instance.instanceSerialNum])
+        postInstanceType = 'PB'
+        postDict = {'instanceSerialNum': instance.instanceSerialNum, 'instanceType': postInstanceType}
+
         response = self.client.post(url, postDict)
         instanceFromDb = models.BookInstance.objects.get(pk=postDict['instanceSerialNum'])
 
@@ -59,13 +63,50 @@ class BookInstanceViewCrudTests(LibraryTestCase):
         self.assertEqual(instanceFromDb.instanceType, postDict['instanceType'])
 
     def test_updateBookInstancePostRequestAsUser(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1)
+
+        book = getBooks(1)
+        instance = models.BookInstance.objects.create(instanceBook=book, instanceType='AB')
+
+        url = reverse('instance-update', args=[instance.instanceSerialNum])
+        postInstanceType = 'PB'
+        postDict = {'instanceSerialNum': instance.instanceSerialNum, 'instanceType': postInstanceType}
+
+        response = self.client.post(url, postDict)
+        instanceFromDb = models.BookInstance.objects.get(pk=postDict['instanceSerialNum'])
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(instanceFromDb.instanceType, 'AB')
 
     def test_deleteBookInstancePostRequestAsAdmin(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1, True)
+
+        book = getBooks(1)
+        instances = getBookInstances(3, book)
+
+        url = reverse('instance-delete', args=[instances[0].instanceSerialNum])
+        response = self.client.post(url)
+
+        instancesFromDb = models.BookInstance.objects.all()
+
+        self.assertTrue(self.loggedIn)
+        self.assertNotIn(instances[0], instancesFromDb)
+        self.assertEqual(instancesFromDb.count(), 2)
 
     def test_deleteBookInstancePostRequestAsUser(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1)
+
+        book = getBooks(1)
+        instances = getBookInstances(3, book)
+
+        url = reverse('instance-delete', args=[instances[0].instanceSerialNum])
+        response = self.client.post(url)
+
+        instancesFromDb = models.BookInstance.objects.all()
+
+        self.assertTrue(self.loggedIn)
+        self.assertIn(instances[0], instancesFromDb)
+        self.assertEqual(instancesFromDb.count(), 3)
 
 @tag('book-instance')
 class BookInstanceViewTests(LibraryTestCase):
