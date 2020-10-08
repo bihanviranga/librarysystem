@@ -18,8 +18,6 @@
 ## Roadmap
 
 ### Todo
-- [ ] Tests for DELETE, UPDATE
-- [ ] Tests - POST request send as both admin and normal user?
 - [ ] Author CRUD (Done so far: Create, Retrieve)
 - [ ] Trailing slash in URLConf for borrow and return causes error
 - [ ] Testcases for not found views
@@ -29,6 +27,8 @@
 - [ ] Users can change passwords.
 
 ### Done
+- [X] Tests for DELETE, UPDATE
+- [X] Tests - POST request send as both admin and normal user?
 - [X] Since control tests are making it large, refactor tests into multiple files?
 - [X] Author page to show information and books
 - [X] Because author was refactored, check every page where author is displayed. (books, book details)
