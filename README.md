@@ -8,14 +8,12 @@
 - Migrate the database: `python manage.py migrate`
 - Load the sample data: `python manage.py loaddata sampledata.json`
 - Run the server: `python manage.py runserver`
+- Login to the default admin account with admin/admin
 
 ## Testing
 - Run tests with `python manage.py test`
 - Tests are tagged as general, book, book-instance, user, author.
 - Run a specific group of tests with `python manage.py test --tag=general`
-
-## Admin users
-- Until User CRUD functions are finished, make a user manually and add him to 'library_admins' group.
 
 ## Roadmap
 
@@ -28,6 +26,7 @@
 - [ ] Read/not read marked in each book.
 - [ ] Book instance types refactor into a seperate models (types can be hardcover, paperback, magazine, etc)
 - [ ] User rate books.
+- [ ] Users can change passwords.
 
 ### Done
 - [X] Since control tests are making it large, refactor tests into multiple files?
