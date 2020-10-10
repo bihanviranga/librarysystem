@@ -19,6 +19,7 @@
 
 ### Todo
 - [ ] Author CRUD (Done so far: Create, Retrieve)
+- [ ] Check whether context['isAdmin'] is set in pages where it is necessary
 - [ ] Trailing slash in URLConf for borrow and return causes error
 - [ ] Testcases for not found views
 - [ ] Read/not read marked in each book.
