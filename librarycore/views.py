@@ -200,6 +200,10 @@ class AuthorDetail(DetailView):
         context = super().get_context_data(**kwargs)
         authorName = self.get_object().authorName
         context['books'] = models.Book.objects.filter(bookAuthor__authorName=authorName)
+
+        if isUserAdmin(self.request.user):
+            context['isAdmin'] = True
+
         return context
 
 class AuthorCreate(UserIsAdminMixin, View):
@@ -207,4 +211,11 @@ class AuthorCreate(UserIsAdminMixin, View):
         authorName = request.POST['authorName']
         models.Author.objects.create(authorName=authorName)
         return redirect('authors')
+
+class AuthorUpdate(UserIsAdminMixin, UpdateView):
+    model = models.Author
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('author-detail', args=[self.get_object().pk])
 

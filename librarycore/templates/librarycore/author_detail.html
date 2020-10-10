@@ -6,7 +6,17 @@ Author - {{author.authorName}}
 
 {% block content %}
 <div class="container">
-	<p>{{author.authorDescription}}</p>
+	<div class="row">
+		{% if isAdmin %}
+		<div class="col">
+			<a class="btn btn-secondary" href="{% url 'author-update' author.id %}">Update</a>
+			<a class="btn btn-danger">Delete</a>
+		</div>
+		{% endif %}
+	</div>
+	<div class="row">
+		<p>{{author.authorDescription}}</p>
+	</div>
 </div>
 
 <div class="container">
