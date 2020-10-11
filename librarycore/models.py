@@ -8,7 +8,7 @@ class Author(models.Model):
 
 class Book(models.Model):
     bookName = models.CharField(max_length=100)
-    bookAuthor = models.ForeignKey('Author', null=True, default=None, on_delete=models.SET_NULL)
+    bookAuthor = models.ForeignKey('Author', null=True, default=None, on_delete=models.CASCADE)
     bookDescription = models.TextField(blank=True)
 
 class BookInstance(models.Model):

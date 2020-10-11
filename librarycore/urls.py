@@ -28,4 +28,5 @@ urlpatterns = [
     path('authors/<int:pk>/', views.AuthorDetail.as_view(), name='author-detail'),
     path('authors/new/', views.AuthorCreate.as_view(), name='author-create'),
     path('authors/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
+    path('authors/<int:pk>/delete/', views.AuthorDelete.as_view(), name='author-delete'),
 ]

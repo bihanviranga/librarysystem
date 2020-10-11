@@ -219,3 +219,22 @@ class AuthorUpdate(UserIsAdminMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('author-detail', args=[self.get_object().pk])
 
+class AuthorDelete(UserIsAdminMixin, View):
+    def get(self, request, pk):
+        author = models.Author.objects.get(pk=pk)
+        context = {"author": author}
+
+        bookCount = models.Book.objects.filter(bookAuthor=author).count()
+        if (bookCount):
+            instanceCount = models.BookInstance.objects.filter(instanceBook__bookAuthor=author).count()
+            context['hasBooks'] = True
+            context['bookCount'] = bookCount
+            context['instanceCount'] = instanceCount
+
+        return render(request, 'librarycore/author_confirm_delete.html', context=context)
+
+    def post(self, request, pk):
+        pk = request.POST['authorId']
+        author = models.Author.objects.get(pk=pk).delete()
+        return redirect('authors')
+
