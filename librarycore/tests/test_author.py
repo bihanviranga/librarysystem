@@ -69,6 +69,34 @@ class AuthorViewCrudTests(LibraryTestCase):
         self.assertEqual(authorFromDb.authorName, originalAuthorName)
         self.assertEqual(authorFromDb.authorDescription, originalAuthorDescription)
 
+    def test_deleteAuthorPostRequestAsAdmin(self):
+        self.loggedIn = self.createUserAndLogin(1, True)
+
+        authors = getAuthors(2)
+
+        url = reverse('author-delete', args=[authors[0].id])
+        response = self.client.post(url)
+
+        authorsFromDb = models.Author.objects.all()
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(authorsFromDb.count(), 1)
+        self.assertNotIn(authors[0], authorsFromDb)
+
+    def test_deleteAuthorPostRequestAsUser(self):
+        self.loggedIn = self.createUserAndLogin(1)
+
+        authors = getAuthors(2)
+
+        url = reverse('author-delete', args=[authors[0].id])
+        response = self.client.post(url)
+
+        authorsFromDb = models.Author.objects.all()
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(list(authorsFromDb), authors)
+        self.assertEqual(authorsFromDb.count(), 2)
+
 @tag('author')
 class AuthorViewTests(LibraryTestCase):
     def test_authorListPageHasCurrentNavSet(self):
