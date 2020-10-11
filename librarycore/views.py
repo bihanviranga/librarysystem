@@ -233,8 +233,8 @@ class AuthorDelete(UserIsAdminMixin, View):
 
         return render(request, 'librarycore/author_confirm_delete.html', context=context)
 
-    def post(self, request, pk):
-        pk = request.POST['authorId']
+    def post(self, request, **kwargs):
+        pk = self.kwargs['pk']
         author = models.Author.objects.get(pk=pk).delete()
         return redirect('authors')
 
