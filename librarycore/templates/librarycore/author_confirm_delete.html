@@ -1,0 +1,17 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}Deleting author {{author.authorName}}{% endblock %}
+
+{% block content %}
+<div class="container">
+	{% if hasBooks %}
+	<p>Warning! This author has {{bookCount}} books and {{instanceCount}} instances!</p>
+	<p>Deleting the author will also delete these books and instances</p>
+	{% endif %}
+	<form method="post">
+		{% csrf_token %}
+		<input type="submit" value="Confirm" class="btn btn-danger" />
+		<a href="{% url 'author-detail' author.id %}" class="btn btn-secondary">Go back</a>
+	</form>
+</div>
+{% endblock %}

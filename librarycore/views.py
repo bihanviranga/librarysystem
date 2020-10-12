@@ -200,11 +200,41 @@ class AuthorDetail(DetailView):
         context = super().get_context_data(**kwargs)
         authorName = self.get_object().authorName
         context['books'] = models.Book.objects.filter(bookAuthor__authorName=authorName)
+
+        if isUserAdmin(self.request.user):
+            context['isAdmin'] = True
+
         return context
 
 class AuthorCreate(UserIsAdminMixin, View):
     def post(self, request):
         authorName = request.POST['authorName']
         models.Author.objects.create(authorName=authorName)
+        return redirect('authors')
+
+class AuthorUpdate(UserIsAdminMixin, UpdateView):
+    model = models.Author
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('author-detail', args=[self.get_object().pk])
+
+class AuthorDelete(UserIsAdminMixin, View):
+    def get(self, request, pk):
+        author = models.Author.objects.get(pk=pk)
+        context = {"author": author}
+
+        bookCount = models.Book.objects.filter(bookAuthor=author).count()
+        if (bookCount):
+            instanceCount = models.BookInstance.objects.filter(instanceBook__bookAuthor=author).count()
+            context['hasBooks'] = True
+            context['bookCount'] = bookCount
+            context['instanceCount'] = instanceCount
+
+        return render(request, 'librarycore/author_confirm_delete.html', context=context)
+
+    def post(self, request, **kwargs):
+        pk = self.kwargs['pk']
+        author = models.Author.objects.get(pk=pk).delete()
         return redirect('authors')
 
