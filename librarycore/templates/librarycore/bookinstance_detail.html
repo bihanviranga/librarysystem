@@ -3,38 +3,38 @@
 {% block maintitle %}{{bookInstance.instanceBook.bookName}} - Instance{%endblock %}
 
 {% block content %}
-<div class="container">
-	<p>{{bookInstance.instanceSerialNum}}</p>
-	<p>{{bookInstance.instanceType}}</p>
+<div class="container mb-2">
+	<div class="row">
+		<div class="col-6 card p-4">
+			<p>{{bookInstance.instanceSerialNum}}</p>
+			<p>{{bookInstance.instanceType}}</p>
+		</div>
+		{% if isAdmin %}
+		<div class="col">
+			<a class="btn btn-danger" href="{% url 'instance-delete' bookInstance.instanceSerialNum %}"><span
+					class="fas fa-trash"></span></a>
+			<a class="btn btn-secondary" id="btnButtonUpdateShow" onclick="bookInstanceUpdateToggle()"><span
+					class="fas fa-edit"></span></a>
+			<form action="{% url 'instance-update' bookInstance.instanceSerialNum %}" method="POST" id="updateInstance"
+				hidden="true" class="form-inline mt-2">
+				{% csrf_token %}
+				<select name="instanceType" class="form-control custom-select" style="margin: 0 1em;">
+					{% for insType, insTypeName in instanceTypes %}
+					{% if insType == bookInstance.instanceType %}
+					<option value="{{insType}}" selected>{{insTypeName}}</option>
+					{% else %}
+					<option value="{{insType}}">{{insTypeName}}</option>
+					{% endif %}
+					{% endfor %}
+				</select>
+				<input type="hidden" name="instanceSerialNum" value="{{bookInstance.instanceSerialNum}}">
+				<br>
+				<button class="btn btn-primary form-control">Update</button>
+			</form>
+		</div>
+		{% endif %}
+	</div>
 </div>
-
-{% if isAdmin %}
-<div class="container" style="margin-bottom:1em;">
-	<a class="btn btn-danger" href="{% url 'instance-delete' bookInstance.instanceSerialNum %}">Delete</a>
-	<a class="btn btn-secondary" id="btnButtonUpdateShow" onclick="bookInstanceUpdateToggle()">Update</a>
-</div>
-{% endif %}
-
-{% if isAdmin %}
-<div class="container">
-	<form action="{% url 'instance-update' bookInstance.instanceSerialNum %}" method="POST" id="updateInstance"
-		hidden="true" class="form-inline">
-		{% csrf_token %}
-		<select name="instanceType" class="form-control custom-select" style="margin: 0 1em;">
-			{% for insType, insTypeName in instanceTypes %}
-			{% if insType == bookInstance.instanceType %}
-			<option value="{{insType}}" selected>{{insTypeName}}</option>
-			{% else %}
-			<option value="{{insType}}">{{insTypeName}}</option>
-			{% endif %}
-			{% endfor %}
-		</select>
-		<input type="hidden" name="instanceSerialNum" value="{{bookInstance.instanceSerialNum}}">
-		<br>
-		<button class="btn btn-primary form-control">Edit</button>
-	</form>
-</div>
-{% endif %}
 
 {% if isAdmin %}
 {% if isBorrowed %}

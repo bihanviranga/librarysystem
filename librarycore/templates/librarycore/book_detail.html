@@ -4,24 +4,39 @@
 
 {% block content %}
 <div class="container">
-	<p>Title: {{book.bookName}}</p>
-	<p>Author: {{book.bookAuthor.authorName}}</p>
-	<p>Description: {{book.bookDescription}}</p>
+	<div class="row">
+		<div class="col-6 card p-4">
+			<p>Title: {{book.bookName}}</p>
+			<p>Author: {{book.bookAuthor.authorName}} <a href="{% url 'author-detail' book.bookAuthor.id %}"><span
+						class="fas fa-angle-double-right"></span></a></p>
+			<p>Description: {{book.bookDescription}}</p>
+		</div>
+		{% if isAdmin %}
+		<div class="col">
+			<a class="btn btn-danger" href="{% url 'book-delete' book.id %}"><span class="fas fa-trash"></span></a>
+			<a class="btn btn-secondary" href="{% url 'book-update' book.id %}"><span class="fas fa-edit"></span></a>
+		</div>
+		{% endif %}
+	</div>
 </div>
 
 {% if isAdmin %}
-<div class="container">
-	<a class="btn btn-success" id="btnInstanceNewShow" onclick="instanceNewToggle()">New instance</a>
-	<form method="post" id="formNewInstance" hidden="true" action="{% url 'instance-create' %}">
-		{% csrf_token %}
-		<input type="hidden" name="bookId" value="{{book.id}}">
-		<select name="instanceType">
-			{% for it1, it2 in instanceTypes %}
-			<option value="{{it1}}">{{it2}}</option>
-			{% endfor %}
-		</select>
-		<button class="btn btn-success">Create</button>
-	</form>
+<div class="container mt-4">
+	<div class="row">
+		<div class="col">
+			<a class="btn btn-success" id="btnInstanceNewShow" onclick="instanceNewToggle()">New instance</a>
+			<form method="post" id="formNewInstance" hidden="true" action="{% url 'instance-create' %}">
+				{% csrf_token %}
+				<input type="hidden" name="bookId" value="{{book.id}}">
+				<select name="instanceType">
+					{% for it1, it2 in instanceTypes %}
+					<option value="{{it1}}">{{it2}}</option>
+					{% endfor %}
+				</select>
+				<button class="btn btn-success">Create</button>
+			</form>
+		</div>
+	</div>
 </div>
 {% endif %}
 

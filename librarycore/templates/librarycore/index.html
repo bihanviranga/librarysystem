@@ -78,6 +78,12 @@
 		</div>
 		{% endif %}
 
+		{% if not user.is_authenticated %}
+		<div class="container">
+			<a class="btn btn-primary" href="{% url 'signup' %}">Sign up!</a>
+		</div>
+		{% endif %}
+
 		<div class="container dashboard">
 			<div class="row justify-content-between mt-2">
 				<div class="col">
