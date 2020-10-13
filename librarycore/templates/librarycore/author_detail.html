@@ -7,19 +7,19 @@ Author - {{author.authorName}}
 {% block content %}
 <div class="container">
 	<div class="row">
+		<div class="col-6 card p-4">
+			<p>{{author.authorDescription}}</p>
+		</div>
 		{% if isAdmin %}
 		<div class="col">
-			<a class="btn btn-secondary" href="{% url 'author-update' author.id %}">Update</a>
-			<a class="btn btn-danger" href="{% url 'author-delete' author.id %}">Delete</a>
+			<a class="btn btn-danger" href="{% url 'author-delete' author.id %}"><span class="fas fa-trash"></span></a>
+			<a class="btn btn-secondary" href="{% url 'author-update' author.id %}"><span class="fas fa-edit"></span></a>
 		</div>
 		{% endif %}
 	</div>
-	<div class="row">
-		<p>{{author.authorDescription}}</p>
-	</div>
 </div>
 
-<div class="container">
+<div class="container mt-2">
 	<h1>Books by {{author.authorName}}</h1>
 	{% for book in books %}
 	<a href="{% url 'book-detail' book.id %}">{{book.bookName}}</a><br />

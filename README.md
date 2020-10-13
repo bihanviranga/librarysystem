@@ -26,6 +26,7 @@
 - [ ] Book instance types refactor into a seperate models (types can be hardcover, paperback, magazine, etc)
 - [ ] User rate books.
 - [ ] Users can change passwords.
+- [ ] In books page, author is passed as a string (just the name). Cannot link to author page.
 
 ### Done
 - [X] Tests for DELETE, UPDATE

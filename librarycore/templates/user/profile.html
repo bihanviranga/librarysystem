@@ -6,20 +6,24 @@
 
 {% block content %}
 <div class="container">
-	<p>Username: {{profile.username}}</p>
-	<p>Email: {{profile.email}}</p>
-	{% if profile.groups.all %}
-	<p>Groups:</p>
-	<ul>
-		{% for group in profile.groups.all %}
-		<li>{{ group }}</li>
-		{% endfor %}
-	</ul>
-	{% endif %}
+	<div class="row">
+		<div class="col-6 card p-4">
+			<p>Username: {{profile.username}}</p>
+			<p>Email: {{profile.email}}</p>
+			{% if profile.groups.all %}
+			<p>Groups:</p>
+			<ul>
+				{% for group in profile.groups.all %}
+				<li>{{ group }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
 </div>
 
 {% if borrowedBooks %}
-<div class="container">
+<div class="container mt-2">
 	<h3>Books borrowed</h3>
 	{% for book in borrowedBooks %}
 	<p>{{book.instanceBook.bookName}} - <a

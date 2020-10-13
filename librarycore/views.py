@@ -15,7 +15,18 @@ def isUserAdmin(user):
     return user.groups.filter(name='library_admins').exists()
 
 def index(request):
-    return render(request, "librarycore/index.html", context={"currentNav": "index"})
+    context={'currentNav': 'index'}
+
+    context['bookCount'] = models.Book.objects.count()
+    context['instanceCount'] = models.BookInstance.objects.count()
+    context['authorCount'] = models.Author.objects.count()
+    context['userCount'] = User.objects.count()
+    context['availableCount'] = models.BookInstance.objects.filter(borrowedBy=None).count()
+    context['loanCount'] = context['instanceCount'] - context['availableCount']
+
+    if isUserAdmin(request.user):
+        context['isAdmin'] = True
+    return render(request, "librarycore/index.html", context=context)
 
 class Books(View):
     def get(self, request):
