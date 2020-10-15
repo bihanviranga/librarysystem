@@ -13,6 +13,10 @@ New book
 	<form method="post" action="{% url 'book-create-update' %}">
 		{% csrf_token %}
 
+		{% if book %}
+		<input type="hidden" name="bookId" value="{{book.id}}">
+		{% endif %}
+
 		<div class="row m-2">
 			<label for="bookName">Book name</label>
 			<input type="text" name="bookName" value="{{book.bookName}}" />

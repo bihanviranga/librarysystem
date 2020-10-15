@@ -92,18 +92,22 @@ class BookCreateAndUpdate(UserIsAdminMixin, View):
             print("Author does not exist")
             return redirect('books')
 
-        book, created = models.Book.objects.update_or_create(
-            bookName=bookName,
-            bookAuthor=authorInstance,
-            bookDescription=bookDescription,
-            defaults={
-                'bookName': bookName,
-                'bookAuthor': authorInstance,
-                'bookDescription': bookDescription
-            }
-        )
+        if 'bookId' in request.POST:
+            models.Book.objects.filter(pk=request.POST['bookId']).update(
+                bookName = bookName,
+                bookAuthor = authorInstance,
+                bookDescription = bookDescription
+            )
+            bookId = request.POST['bookId']
+        else:
+            book = models.Book.objects.create(
+                bookName = bookName,
+                bookAuthor = authorInstance,
+                bookDescription = bookDescription
+            )
+            bookId = book.id
 
-        return redirect('book-detail', book.id)
+        return redirect('book-detail', bookId)
 
 class BookInstanceCreate(UserIsAdminMixin, View):
     def post(self, request):

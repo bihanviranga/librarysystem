@@ -22,7 +22,7 @@ class BookViewCrudTest(LibraryTestCase):
 
         author = models.Author.objects.create(authorName='testingAuthor')
 
-        url = reverse('book-create')
+        url = reverse('book-create-update')
         postDict = {'bookName': 'testingBook', 'bookAuthor':'testingAuthor', 'bookDescription':'testingDescription'}
         response = self.client.post(url, postDict)
         bookFromDb = models.Book.objects.all()[0]
@@ -36,7 +36,7 @@ class BookViewCrudTest(LibraryTestCase):
 
         author = models.Author.objects.create(authorName='testingAuthor')
 
-        url = reverse('book-create')
+        url = reverse('book-create-update')
         postDict = {'bookName':'testingBook', 'bookAuthor':'testingAuthor', 'bookDescription':'testingDescription'}
         response = self.client.post(url, postDict)
         booksInDb = models.Book.objects.all().count()
@@ -50,8 +50,8 @@ class BookViewCrudTest(LibraryTestCase):
         book1 = getBooks(1)
         author2 = models.Author.objects.create(authorName="updatedAuthor")
 
-        url = reverse('book-update', args=[book1.id])
-        postDict = {"id":book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.id}
+        url = reverse('book-create-update')
+        postDict = {"bookId": book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.authorName}
         response = self.client.post(url, postDict)
 
         book1 = models.Book.objects.get(pk=book1.id)
@@ -70,8 +70,8 @@ class BookViewCrudTest(LibraryTestCase):
         origBookAuthorName = book1.bookAuthor.authorName
         author2 = models.Author.objects.create(authorName="updatedAuthor")
 
-        url = reverse('book-update', args=[book1.id])
-        postDict = {"id": book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.id}
+        url = reverse('book-create-update')
+        postDict = {"bookId": book1.id, "bookName":"updatedBookName", "bookDescription":"updatedBookDescription", "bookAuthor":author2.id}
         response = self.client.post(url, postDict)
 
         book1 = models.Book.objects.get(pk=book1.id)
