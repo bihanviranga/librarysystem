@@ -12,10 +12,11 @@ urlpatterns = [
     path('users/', views.UserList.as_view(), name='users'),
 
     path('books/', views.Books.as_view(), name='books'),
-    path('books/new/', views.BooksCreate.as_view(), name='book-create'),
+    path('books/new/', views.BookCreate.as_view(), name='book-create'),
     path('books/<int:pk>/', views.BookDetail.as_view(), name='book-detail'),
     path('books/<int:pk>/delete/', views.BookDelete.as_view(), name='book-delete'),
     path('books/<int:pk>/update/', views.BookUpdate.as_view(), name='book-update'),
+    path('books/create-update/', views.BookCreateAndUpdate.as_view(), name='book-create-update'),
 
     path('bookinstances/new/', views.BookInstanceCreate.as_view(), name='instance-create'),
     path('bookinstances/<str:pk>/', views.BookInstanceDetail.as_view(), name='instance-detail'),
