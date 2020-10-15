@@ -10,15 +10,27 @@ New book
 
 {% block content %}
 <div class="container" style="margin-top:2em;">
-	<form method="post">
+	<form method="post" action="{% url 'book-create-update' %}">
 		{% csrf_token %}
-		{% for field in form %}
-		<div class="row" style="margin-bottom: 1em;">
-			{{field.errors}}
-			{{field.label_tag}}{{field}}
+
+		<div class="row m-2">
+			<label for="bookName">Book name</label>
+			<input type="text" name="bookName" value="{{book.bookName}}" />
 		</div>
-		{% endfor %}
-		<input type="submit" value="Submit" class="btn btn-success" />
+
+		<div class="row m-2">
+			<label for="bookAuthor">Book author</label>
+			<input type="text" name="bookAuthor" value="{{book.bookAuthor.authorName}}" />
+		</div>
+
+		<div class="row m-2">
+			<label for="bookDescription">Book description</label>
+			<textarea name="bookDescription" cols="50">{{book.bookDescription}}</textarea>
+		</div>
+
+		<div class="row m-2">
+			<input type="submit" value="Submit" class="btn btn-success" />
+		</div>
 	</form>
 </div>
 {% endblock %}

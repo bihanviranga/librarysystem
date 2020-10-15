@@ -68,14 +68,20 @@ class BookDetail(DetailView):
         return context
 
 class BookUpdate(UserIsAdminMixin, UpdateView):
-    model = models.Book
-    success_url = reverse_lazy('books')
-    fields = '__all__'
+    def get(self, request, pk):
+        book = models.Book.objects.get(pk=pk)
+        return render(request, 'librarycore/book_form.html', context={'book':book})
 
-class BooksCreate(UserIsAdminMixin, View):
+class BookCreate(UserIsAdminMixin, View):
+    def get(self, request):
+        return render(request, 'librarycore/book_form.html')
+
+class BookCreateAndUpdate(UserIsAdminMixin, View):
     def post(self, request):
         bookName = request.POST['bookName']
         bookAuthor = request.POST['bookAuthor']
+        bookDescription = request.POST['bookDescription']
+
         try:
             authorInstance = models.Author.objects.get(authorName=bookAuthor)
         except models.Author.DoesNotExist:
@@ -85,8 +91,19 @@ class BooksCreate(UserIsAdminMixin, View):
             # else, redirect back to books page.
             print("Author does not exist")
             return redirect('books')
-        bookInstance = models.Book.objects.create(bookName=bookName, bookAuthor=authorInstance)
-        return redirect('books')
+
+        book, created = models.Book.objects.update_or_create(
+            bookName=bookName,
+            bookAuthor=authorInstance,
+            bookDescription=bookDescription,
+            defaults={
+                'bookName': bookName,
+                'bookAuthor': authorInstance,
+                'bookDescription': bookDescription
+            }
+        )
+
+        return redirect('book-detail', book.id)
 
 class BookInstanceCreate(UserIsAdminMixin, View):
     def post(self, request):
