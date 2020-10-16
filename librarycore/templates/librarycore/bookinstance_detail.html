@@ -6,6 +6,7 @@
 <div class="container mb-2">
 	<div class="row">
 		<div class="col-6 card p-4">
+			<a href="{% url 'book-detail' bookInstance.instanceBook.id %}">{{bookInstance.instanceBook.bookName}}</a>
 			<p>{{bookInstance.instanceSerialNum}}</p>
 			<p>{{bookInstance.instanceType}}</p>
 		</div>
