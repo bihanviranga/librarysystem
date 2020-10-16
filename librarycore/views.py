@@ -80,7 +80,10 @@ class BookCreateAndUpdate(UserIsAdminMixin, View):
     def post(self, request):
         bookName = request.POST['bookName']
         bookAuthor = request.POST['bookAuthor']
-        bookDescription = request.POST['bookDescription']
+        if 'bookDescription' in request.POST:
+            bookDescription = request.POST['bookDescription']
+        else:
+            bookDescription = ""
 
         try:
             authorInstance = models.Author.objects.get(authorName=bookAuthor)

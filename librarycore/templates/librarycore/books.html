@@ -10,7 +10,7 @@
 			<button class="btn btn-success" id="btnBookNewShow" onclick="bookNewToggle()">New</button>
 		</div>
 		<div class="col">
-			<form action="{% url 'book-create' %}" method="POST">
+			<form action="{% url 'book-create-update' %}" method="POST">
 				{% csrf_token %}
 				<input type="text" name="bookName" id="txtBookName" hidden="true" placeholder="Book Name" />
 				<input type="text" name="bookAuthor" id="txtAuthorName" hidden="true" placeholder="Author Name" />
