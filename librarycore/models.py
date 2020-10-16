@@ -27,3 +27,9 @@ class BookInstance(models.Model):
     instanceType = models.CharField(max_length=20, choices=INSTANCE_TYPE_CHOICES, default=PHYSICAL_COPY)
     borrowedBy = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='borrowedBook', default=None,null=True)
 
+class BookRating(models.Model):
+    book = models.ForeignKey('Book', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
+    ratings = models.IntegerField()
+    comment = models.TextField(blank=True)
+
