@@ -3,4 +3,5 @@ from .book import *
 from .instance import *
 from .user import *
 from .author import *
+from .rating import *
 
