@@ -72,10 +72,10 @@
 </div>
 
 {% if user.is_authenticated %}
+<!-- ADD NEW RATING -->
 <div class="container mt-4">
 	<hr>
 	<div class="row card p-4">
-		<!-- ADD NEW RATING -->
 		<h3>Rate this book</h3>
 		<form method="POST" action="{% url 'rating-create' book.id %}">
 			{% csrf_token %}
@@ -94,11 +94,25 @@
 			</div>
 		</form>
 	</div>
-	<div class="row">
-		<!-- DISPLAY EXISTING RATINGS -->
-	</div>
 </div>
 {% endif %}
+
+<!-- Display existing ratings -->
+<div class="container mt-4 mb-4">
+	<h3>User ratings</h3>
+	{% for rating in bookRatings %}
+	<div class="row">
+		<div class="col">
+			<div class="row">
+				<h5>{{rating.ratings}}/10 <small class="text-muted">by {{rating.user.username}}</small></h5>
+			</div>
+			<div class="row">
+				<p>{{rating.comment}}</p>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
 
 {% if isAdmin %}
 <script>

@@ -36,5 +36,14 @@ class RatingViewCrudTest(LibraryTestCase):
         self.fail()
 
     def test_bookDetailPageShowsRatings(self):
-        self.fail()
+        book = getBooks(1)
+        user = getUsers(1)
+        r1 = models.BookRating.objects.create(book=book, user=user, ratings=1, comment="testingComment1")
+        r2 = models.BookRating.objects.create(book=book, user=user, ratings=2, comment="testingComment2")
+        r3 = models.BookRating.objects.create(book=book, user=user, ratings=3, comment="testingComment3")
+
+        url = reverse('book-detail', args=[book.id])
+        response = self.client.get(url)
+
+        self.assertEqual(list(response.context['bookRatings']), [r1, r2, r3])
 
