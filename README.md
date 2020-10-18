@@ -18,6 +18,7 @@
 ## Roadmap
 
 ### Todo
+- [ ] Rename Rating.ratings to Rating.rating or something.
 - [ ] Check whether context['isAdmin'] is set in pages where it is necessary
 - [ ] User profile management - change name, email, password.
 - [ ] Trailing slash in URLConf for borrow and return causes error
