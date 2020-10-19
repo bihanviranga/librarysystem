@@ -18,6 +18,13 @@ class RatingDelete(View):
         pass
 
 class RatingUpdate(View):
-    def post(self, request):
-        pass
+    def post(self, request, pk):
+        rating = models.BookRating.objects.get(pk=pk)
+        if 'comment' in request.POST:
+            rating.comment = request.POST['comment']
+        if 'rating' in request.POST:
+            rating.ratings = request.POST['rating']
+        rating.save()
+
+        return redirect('book-detail', rating.book.id)
 

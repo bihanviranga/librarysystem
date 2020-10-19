@@ -24,7 +24,27 @@ class RatingViewCrudTest(LibraryTestCase):
         self.assertEqual(ratingsFromDb[0].comment, postDict['comment'])
 
     def test_updateRatingPostRequest(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1)
+        book = getBooks(1)
+        rating = models.BookRating.objects.create(
+            user=self.user,
+            book=book,
+            comment="testingComment",
+            ratings=1
+        )
+
+        url = reverse('rating-update', args=[rating.id])
+        postDict = {'comment': 'updatedComment', 'rating': 10}
+        response = self.client.post(url, postDict)
+
+        rating = models.BookRating.objects.get(pk=rating.id)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(rating.user, self.user)
+        self.assertEqual(rating.book, book)
+        self.assertEqual(rating.comment, postDict['comment'])
+        self.assertEqual(rating.ratings, postDict['rating'])
+
 
     def test_deleteRatingPostRequest(self):
         self.fail()
