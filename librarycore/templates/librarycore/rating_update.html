@@ -1,0 +1,24 @@
+{% extends 'librarycore/index.html' %}
+
+{% block maintitle %}Updating rating{% endblock %}
+
+{% block content %}
+<div class="container">
+	<form method="POST">
+		{% csrf_token %}
+		<div class="form-group">
+			<label for="rating">Rating</label>
+			<input type="number" name="rating" min="0" max="10" class="form-control" value="{{rating.ratings}}" />
+		</div>
+
+		<div class="form-group">
+			<label for="comment">Comment</label>
+			<textarea class="form-control" name="comment">{{rating.comment}}</textarea>
+		</div>
+
+		<div class="form-group">
+			<button class="btn btn-primary">Update</button>
+		</div>
+	</form>
+</div>
+{% endblock %}

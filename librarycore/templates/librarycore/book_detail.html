@@ -103,11 +103,26 @@
 	{% for rating in bookRatings %}
 	<div class="row">
 		<div class="col">
+			<hr>
 			<div class="row">
-				<h5>{{rating.ratings}}/10 <small class="text-muted">by {{rating.user.username}}</small></h5>
+				<div class="col">
+					<h5>{{rating.ratings}}/10 <small class="text-muted">by {{rating.user.username}}</small></h5>
+				</div>
+				<div class="col-2">
+					{% if rating.user == user %}
+					<a class="btn btn-sm btn-secondary" href="{% url 'rating-update' rating.id %}"><span
+							class="fas fa-edit"></span></a>
+					{% endif %}
+					{% if rating.user == user or isAdmin %}
+					<a class="btn btn-sm btn-danger" href="{% url 'rating-delete' rating.id %}"><span
+							class="fas fa-trash"></span></a>
+					{% endif %}
+				</div>
 			</div>
 			<div class="row">
-				<p>{{rating.comment}}</p>
+				<div class="col">
+					<p>{{rating.comment}}</p>
+				</div>
 			</div>
 		</div>
 	</div>

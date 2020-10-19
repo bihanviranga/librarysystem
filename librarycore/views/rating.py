@@ -1,5 +1,5 @@
 from django.views import View
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from librarycore import models
 
 class RatingCreate(View):
@@ -27,4 +27,9 @@ class RatingUpdate(View):
         rating.save()
 
         return redirect('book-detail', rating.book.id)
+
+    def get(self, request, pk):
+        rating = models.BookRating.objects.get(pk=pk)
+        context = {'rating': rating}
+        return render(request, 'librarycore/rating_update.html', context)
 
