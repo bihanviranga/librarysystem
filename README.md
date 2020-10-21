@@ -18,8 +18,6 @@
 ## Roadmap
 
 ### Todo
-- [ ] Update Rating : hide rating section when there are no ratings.
-- [ ] Rename Rating.ratings to Rating.rating or something.
 - [ ] For things like comments, forms, etc, can use sweetalert2.
 - [ ] Check whether context['isAdmin'] is set in pages where it is necessary
 - [ ] User profile management - change name, email, password.
@@ -27,11 +25,11 @@
 - [ ] Testcases for not found views
 - [ ] Read/not read marked in each book.
 - [ ] Book instance types refactor into a seperate models (types can be hardcover, paperback, magazine, etc)
-- [ ] User rate books.
 - [ ] In books page, author is passed as a string (just the name). Cannot link to author page.
 - [ ] getUsers() in test helpers -- rename to getUser() ?
 
 ### Done
+- [X] Ratings for books, CRUD + Tests
 - [X] Author CRUD + Tests
 - [X] Refactor tests into multiple files?
 - [X] Book authors refactor into seperate models.
