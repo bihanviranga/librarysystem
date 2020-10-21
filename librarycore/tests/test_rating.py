@@ -46,9 +46,28 @@ class RatingViewCrudTest(LibraryTestCase):
         self.assertEqual(rating.ratings, postDict['rating'])
 
     def test_canUpdateOnlyOwnRatings(self):
-        self.fail()
+        user = getUsers(2)
+        book = getBooks(1)
+        rating = models.BookRating.objects.create(book=book, user=user, ratings=1, comment="originalComment1")
 
-    def test_deleteRatingPostRequest(self):
+        url = reverse('rating-update', args=[rating.id])
+
+        self.loggedIn = self.createUserAndLogin(1)
+        postDictUser = {'comment': 'userComment', 'rating': 2}
+        responseUser = self.client.post(url, postDictUser)
+        self.client.logout()
+
+        self.loggedIn = self.createUserAndLogin(3, True)
+        postDictAdmin = {'comment': 'adminComment', 'rating': 3}
+        responseAdmin = self.client.post(url, postDictAdmin)
+        self.client.logout()
+
+        rating = models.BookRating.objects.get(pk=rating.id)
+
+        self.assertEqual(rating.comment, 'originalComment1')
+        self.assertEqual(rating.ratings, 1)
+
+    def test_userCanDeleteOwnRatingPostRequest(self):
         self.loggedIn = self.createUserAndLogin(1)
         book = getBooks(1)
         rating = models.BookRating.objects.create(book=book, user=self.user, ratings=1, comment="testingComment1")
@@ -78,7 +97,19 @@ class RatingViewCrudTest(LibraryTestCase):
         self.assertNotIn(rating, ratings)
 
     def test_userCannotDeleteOtherUserRatings(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1)
+        user = getUsers(2)
+        book = getBooks(1)
+        rating = models.BookRating.objects.create(book=book, user=user, ratings=1, comment="testingComment1")
+
+        url = reverse('rating-delete', args=[rating.id])
+        response = self.client.get(url)
+
+        ratings = models.BookRating.objects.filter(book=book)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(ratings.count(), 1)
+        self.assertIn(rating, ratings)
 
     def test_bookDetailPageShowsRatings(self):
         book = getBooks(1)
