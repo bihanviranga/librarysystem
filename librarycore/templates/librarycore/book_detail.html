@@ -98,7 +98,8 @@
 {% endif %}
 
 <!-- Display existing ratings -->
-<div class="container mt-4 mb-4">
+{% if bookRatings.count > 0 %}
+<div class="container mt-4">
 	<h3>User ratings</h3>
 	{% for rating in bookRatings %}
 	<div class="row">
@@ -128,6 +129,7 @@
 	</div>
 	{% endfor %}
 </div>
+{% endif %}
 
 {% if isAdmin %}
 <script>
