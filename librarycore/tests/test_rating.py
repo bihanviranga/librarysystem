@@ -45,12 +45,37 @@ class RatingViewCrudTest(LibraryTestCase):
         self.assertEqual(rating.comment, postDict['comment'])
         self.assertEqual(rating.ratings, postDict['rating'])
 
+    def test_canUpdateOnlyOwnRatings(self):
+        self.fail()
 
     def test_deleteRatingPostRequest(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1)
+        book = getBooks(1)
+        rating = models.BookRating.objects.create(book=book, user=self.user, ratings=1, comment="testingComment1")
+
+        url = reverse('rating-delete', args=[rating.id])
+        response = self.client.get(url)
+
+        ratings = models.BookRating.objects.filter(book=book)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(ratings.count(), 0)
+        self.assertNotIn(rating, ratings)
 
     def test_adminCanDeleteOtherUserRatings(self):
-        self.fail()
+        self.loggedIn = self.createUserAndLogin(1, True)
+        user = getUsers(2)
+        book = getBooks(1)
+        rating = models.BookRating.objects.create(book=book, user=user, ratings=1, comment="testingComment1")
+
+        url = reverse('rating-delete', args=[rating.id])
+        response = self.client.get(url)
+
+        ratings = models.BookRating.objects.filter(book=book)
+
+        self.assertTrue(self.loggedIn)
+        self.assertEqual(ratings.count(), 0)
+        self.assertNotIn(rating, ratings)
 
     def test_userCannotDeleteOtherUserRatings(self):
         self.fail()
