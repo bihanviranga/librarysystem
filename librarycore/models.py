@@ -30,6 +30,6 @@ class BookInstance(models.Model):
 class BookRating(models.Model):
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ratings')
-    ratings = models.IntegerField()
+    score = models.IntegerField()
     comment = models.TextField(blank=True)
 

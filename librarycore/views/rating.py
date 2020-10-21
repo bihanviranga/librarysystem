@@ -9,7 +9,7 @@ class RatingCreate(View):
         models.BookRating.objects.create(
             book=book,
             user=request.user,
-            ratings=request.POST['rating'],
+            score=request.POST['score'],
             comment=request.POST['comment']
         )
         return redirect('book-detail', book.id)
@@ -28,8 +28,8 @@ class RatingUpdate(View):
         if rating.user == request.user:
             if 'comment' in request.POST:
                 rating.comment = request.POST['comment']
-            if 'rating' in request.POST:
-                rating.ratings = request.POST['rating']
+            if 'score' in request.POST:
+                rating.score = request.POST['score']
             rating.save()
         return redirect('book-detail', rating.book.id)
 

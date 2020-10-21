@@ -13,14 +13,14 @@ class RatingViewCrudTest(LibraryTestCase):
         self.loggedIn = self.createUserAndLogin(1)
         book = getBooks(1)
         url = reverse('rating-create', args=[book.id])
-        postDict = {'rating': 10, 'comment': 'sampleComment'}
+        postDict = {'score': 10, 'comment': 'sampleComment'}
         response = self.client.post(url, postDict)
 
         ratingsFromDb = models.BookRating.objects.filter(book=book)
 
         self.assertTrue(self.loggedIn)
         self.assertEqual(ratingsFromDb.count(), 1)
-        self.assertEqual(ratingsFromDb[0].ratings, postDict['rating'])
+        self.assertEqual(ratingsFromDb[0].score, postDict['score'])
         self.assertEqual(ratingsFromDb[0].comment, postDict['comment'])
 
     def test_updateRatingPostRequest(self):
@@ -30,11 +30,11 @@ class RatingViewCrudTest(LibraryTestCase):
             user=self.user,
             book=book,
             comment="testingComment",
-            ratings=1
+            score=1
         )
 
         url = reverse('rating-update', args=[rating.id])
-        postDict = {'comment': 'updatedComment', 'rating': 10}
+        postDict = {'comment': 'updatedComment', 'score': 10}
         response = self.client.post(url, postDict)
 
         rating = models.BookRating.objects.get(pk=rating.id)
@@ -43,34 +43,34 @@ class RatingViewCrudTest(LibraryTestCase):
         self.assertEqual(rating.user, self.user)
         self.assertEqual(rating.book, book)
         self.assertEqual(rating.comment, postDict['comment'])
-        self.assertEqual(rating.ratings, postDict['rating'])
+        self.assertEqual(rating.score, postDict['score'])
 
     def test_canUpdateOnlyOwnRatings(self):
         user = getUsers(2)
         book = getBooks(1)
-        rating = models.BookRating.objects.create(book=book, user=user, ratings=1, comment="originalComment1")
+        rating = models.BookRating.objects.create(book=book, user=user, score=1, comment="originalComment1")
 
         url = reverse('rating-update', args=[rating.id])
 
         self.loggedIn = self.createUserAndLogin(1)
-        postDictUser = {'comment': 'userComment', 'rating': 2}
+        postDictUser = {'comment': 'userComment', 'score': 2}
         responseUser = self.client.post(url, postDictUser)
         self.client.logout()
 
         self.loggedIn = self.createUserAndLogin(3, True)
-        postDictAdmin = {'comment': 'adminComment', 'rating': 3}
+        postDictAdmin = {'comment': 'adminComment', 'score': 3}
         responseAdmin = self.client.post(url, postDictAdmin)
         self.client.logout()
 
         rating = models.BookRating.objects.get(pk=rating.id)
 
         self.assertEqual(rating.comment, 'originalComment1')
-        self.assertEqual(rating.ratings, 1)
+        self.assertEqual(rating.score, 1)
 
     def test_userCanDeleteOwnRatingPostRequest(self):
         self.loggedIn = self.createUserAndLogin(1)
         book = getBooks(1)
-        rating = models.BookRating.objects.create(book=book, user=self.user, ratings=1, comment="testingComment1")
+        rating = models.BookRating.objects.create(book=book, user=self.user, score=1, comment="testingComment1")
 
         url = reverse('rating-delete', args=[rating.id])
         response = self.client.get(url)
@@ -85,7 +85,7 @@ class RatingViewCrudTest(LibraryTestCase):
         self.loggedIn = self.createUserAndLogin(1, True)
         user = getUsers(2)
         book = getBooks(1)
-        rating = models.BookRating.objects.create(book=book, user=user, ratings=1, comment="testingComment1")
+        rating = models.BookRating.objects.create(book=book, user=user, score=1, comment="testingComment1")
 
         url = reverse('rating-delete', args=[rating.id])
         response = self.client.get(url)
@@ -100,7 +100,7 @@ class RatingViewCrudTest(LibraryTestCase):
         self.loggedIn = self.createUserAndLogin(1)
         user = getUsers(2)
         book = getBooks(1)
-        rating = models.BookRating.objects.create(book=book, user=user, ratings=1, comment="testingComment1")
+        rating = models.BookRating.objects.create(book=book, user=user, score=1, comment="testingComment1")
 
         url = reverse('rating-delete', args=[rating.id])
         response = self.client.get(url)
@@ -114,9 +114,9 @@ class RatingViewCrudTest(LibraryTestCase):
     def test_bookDetailPageShowsRatings(self):
         book = getBooks(1)
         user = getUsers(1)
-        r1 = models.BookRating.objects.create(book=book, user=user, ratings=1, comment="testingComment1")
-        r2 = models.BookRating.objects.create(book=book, user=user, ratings=2, comment="testingComment2")
-        r3 = models.BookRating.objects.create(book=book, user=user, ratings=3, comment="testingComment3")
+        r1 = models.BookRating.objects.create(book=book, user=user, score=1, comment="testingComment1")
+        r2 = models.BookRating.objects.create(book=book, user=user, score=2, comment="testingComment2")
+        r3 = models.BookRating.objects.create(book=book, user=user, score=3, comment="testingComment3")
 
         url = reverse('book-detail', args=[book.id])
         response = self.client.get(url)

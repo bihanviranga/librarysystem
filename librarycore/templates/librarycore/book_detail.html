@@ -80,8 +80,8 @@
 		<form method="POST" action="{% url 'rating-create' book.id %}">
 			{% csrf_token %}
 			<div class="form-group">
-				<label for="rating">Rating</label>
-				<input type="number" name="rating" min="0" max="10" class="form-control" />
+				<label for="rating">Score</label>
+				<input type="number" name="score" min="0" max="10" class="form-control" />
 			</div>
 
 			<div class="form-group">
@@ -107,7 +107,7 @@
 			<hr>
 			<div class="row">
 				<div class="col">
-					<h5>{{rating.ratings}}/10 <small class="text-muted">by {{rating.user.username}}</small></h5>
+					<h5>{{rating.score}}/10 <small class="text-muted">by {{rating.user.username}}</small></h5>
 				</div>
 				<div class="col-2">
 					{% if rating.user == user %}

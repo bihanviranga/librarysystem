@@ -7,8 +7,8 @@
 	<form method="POST">
 		{% csrf_token %}
 		<div class="form-group">
-			<label for="rating">Rating</label>
-			<input type="number" name="rating" min="0" max="10" class="form-control" value="{{rating.ratings}}" />
+			<label for="rating">Score</label>
+			<input type="number" name="score" min="0" max="10" class="form-control" value="{{rating.score}}" />
 		</div>
 
 		<div class="form-group">
