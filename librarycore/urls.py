@@ -30,4 +30,8 @@ urlpatterns = [
     path('authors/new/', views.AuthorCreate.as_view(), name='author-create'),
     path('authors/<int:pk>/update/', views.AuthorUpdate.as_view(), name='author-update'),
     path('authors/<int:pk>/delete/', views.AuthorDelete.as_view(), name='author-delete'),
+
+    path('ratings/new/<int:bookId>/', views.RatingCreate.as_view(), name='rating-create'),
+    path('ratings/<int:pk>/delete/', views.RatingDelete.as_view(), name='rating-delete'),
+    path('ratings/<int:pk>/update/', views.RatingUpdate.as_view(), name='rating-update'),
 ]

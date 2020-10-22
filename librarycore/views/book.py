@@ -36,10 +36,13 @@ class BookDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         book = self.get_object()
+
         bookInstances = models.BookInstance.objects.filter(instanceBook=book)
         context['instances'] = bookInstances
         bookInstanceTypes = models.BookInstance.INSTANCE_TYPE_CHOICES
         context['instanceTypes'] = bookInstanceTypes
+        bookRatings = models.BookRating.objects.filter(book=book)
+        context['bookRatings'] = bookRatings
 
         if isUserAdmin(self.request.user):
             context['isAdmin'] = True

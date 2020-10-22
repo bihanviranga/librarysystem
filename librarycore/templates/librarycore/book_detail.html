@@ -41,7 +41,7 @@
 {% endif %}
 
 
-<div class="container">
+<div class="container mt-4">
 	<hr>
 	{% if instances.count == 0 %}
 	<p>No copies available</p>
@@ -70,6 +70,66 @@
 	{% endfor %}
 	{% endif %}
 </div>
+
+{% if user.is_authenticated %}
+<!-- ADD NEW RATING -->
+<div class="container mt-4">
+	<hr>
+	<div class="row card p-4">
+		<h3>Rate this book</h3>
+		<form method="POST" action="{% url 'rating-create' book.id %}">
+			{% csrf_token %}
+			<div class="form-group">
+				<label for="rating">Score</label>
+				<input type="number" name="score" min="0" max="10" class="form-control" />
+			</div>
+
+			<div class="form-group">
+				<label for="comment">Comment</label>
+				<textarea name="comment" class="form-control"></textarea>
+			</div>
+
+			<div class="form-group">
+				<button class="btn btn-primary" type="submit">Rate</button>
+			</div>
+		</form>
+	</div>
+</div>
+{% endif %}
+
+<!-- Display existing ratings -->
+{% if bookRatings.count > 0 %}
+<div class="container mt-4">
+	<h3>User ratings</h3>
+	{% for rating in bookRatings %}
+	<div class="row">
+		<div class="col">
+			<hr>
+			<div class="row">
+				<div class="col">
+					<h5>{{rating.score}}/10 <small class="text-muted">by {{rating.user.username}}</small></h5>
+				</div>
+				<div class="col-2">
+					{% if rating.user == user %}
+					<a class="btn btn-sm btn-secondary" href="{% url 'rating-update' rating.id %}"><span
+							class="fas fa-edit"></span></a>
+					{% endif %}
+					{% if rating.user == user or isAdmin %}
+					<a class="btn btn-sm btn-danger" href="{% url 'rating-delete' rating.id %}"><span
+							class="fas fa-trash"></span></a>
+					{% endif %}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<p>{{rating.comment}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+{% endif %}
 
 {% if isAdmin %}
 <script>
