@@ -5,9 +5,6 @@ from .helpers import *
 
 @tag('general')
 class GeneralSiteTests(TestCase):
-    def setup(self):
-        setup_test_environment()
-
     def test_indexHasCurrentNavSet(self):
         url = reverse('index')
         response = self.client.get(url)
@@ -25,6 +22,7 @@ class GeneralSiteTests(TestCase):
         book2instances[1].borrowedBy = user2
         book2instances[1].save()
 
+        # So far we have:
         # 3 books
         # 7 instances
         # 4 authors
@@ -34,7 +32,6 @@ class GeneralSiteTests(TestCase):
 
         url = reverse('index')
         response = self.client.get(url)
-
 
         self.assertEqual(response.context['bookCount'], 3)
         self.assertEqual(response.context['instanceCount'], 7)
