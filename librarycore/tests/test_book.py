@@ -7,9 +7,6 @@ from .helpers import *
 
 @tag('book', 'book-crud')
 class BookViewCrudTest(LibraryTestCase):
-    def setup(self):
-        setup_test_environment()
-
     def test_bookDetailsPageShowsBookInformation(self):
         book = getBooks(1)
         url = reverse('book-detail', args=[book.id])
@@ -111,9 +108,6 @@ class BookViewCrudTest(LibraryTestCase):
 
 @tag('book')
 class BookViewTests(LibraryTestCase):
-    def setup(self):
-        setup_test_environment()
-
     def test_booksPageHasCurrentNavSet(self):
         url = reverse('books')
         response = self.client.get(url)
