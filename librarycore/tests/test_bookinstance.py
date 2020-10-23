@@ -6,9 +6,6 @@ from .helpers import *
 
 @tag('book-instance', 'book-instance-crud')
 class BookInstanceViewCrudTests(LibraryTestCase):
-    def setup(self):
-        setup_test_environment()
-
     def test_viewBookInstanceDetails(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
@@ -110,9 +107,6 @@ class BookInstanceViewCrudTests(LibraryTestCase):
 
 @tag('book-instance')
 class BookInstanceViewTests(LibraryTestCase):
-    def setup(self):
-        setup_test_environment()
-
     def test_bookInstancePageHasInstanceTypes(self):
         book1 = getBooks(1)
         instance = getBookInstances(1, book1)

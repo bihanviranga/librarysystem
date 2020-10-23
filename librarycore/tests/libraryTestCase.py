@@ -1,9 +1,13 @@
 from django.test import TestCase
+from django.test.utils import setup_test_environment
 from .helpers import *
 
 class LibraryTestCase(TestCase):
     loggedIn = False
     user = None
+
+    def setup(self):
+        setup_test_environment()
 
     def createUserAndLogin(self, n, admin=False):
         user = getUsers(n, admin)
