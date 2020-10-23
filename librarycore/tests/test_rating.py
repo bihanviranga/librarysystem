@@ -6,9 +6,6 @@ from .helpers import *
 
 @tag('rating', 'rating-crud')
 class RatingViewCrudTest(LibraryTestCase):
-    def setup(self):
-        setup_test_environment()
-
     def test_createRatingPostRequest(self):
         self.loggedIn = self.createUserAndLogin(1)
         book = getBooks(1)
