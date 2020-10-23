@@ -6,9 +6,6 @@ from .helpers import *
 
 @tag('user')
 class UserTests(LibraryTestCase):
-    def setup(self):
-        setup_test_environment()
-
     def test_cannotAccessUsersPageAsNormalUser(self):
         self.loggedIn = self.createUserAndLogin(1)
 
