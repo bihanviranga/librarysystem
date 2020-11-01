@@ -134,7 +134,7 @@ class BookViewTests(LibraryTestCase):
     def test_booksPageShowsBooksCounts(self):
         book = getBooks(1)
         instances = getBookInstances(5, book)
-        user = getUsers(1)
+        user = getUser(1)
         instances[0].borrowedBy = user
         instances[0].save()
         instances[1].borrowedBy = user

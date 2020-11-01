@@ -56,7 +56,7 @@ def getBookInstances(count, book):
     else:
         return bookInstances
 
-def getUsers(n, admin=False):
+def getUser(n, admin=False):
     """
     Return a User object.
 

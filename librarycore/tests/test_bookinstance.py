@@ -119,7 +119,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_adminCanMarkInstancesAsBorrowed(self):
         self.loggedIn = self.createUserAndLogin(1, True)
 
-        borrowingUser = getUsers(2)
+        borrowingUser = getUser(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
 
@@ -136,7 +136,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_userCannotMarkInstancesAsBorrowed(self):
         self.loggedIn = self.createUserAndLogin(1)
 
-        borrowingUser = getUsers(2)
+        borrowingUser = getUser(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
 
@@ -151,8 +151,8 @@ class BookInstanceViewTests(LibraryTestCase):
         self.assertIsNone(instance.borrowedBy)
 
     def test_adminCannotBorrowAlreadyBorrowedInstances(self):
-        borrowingUser = getUsers(1)
-        borrowingUser2 = getUsers(2)
+        borrowingUser = getUser(1)
+        borrowingUser2 = getUser(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
         instance.borrowedBy = borrowingUser
@@ -170,7 +170,7 @@ class BookInstanceViewTests(LibraryTestCase):
 
     def test_adminCanMarkInstancesAsReturned(self):
         self.loggedIn = self.createUserAndLogin(1, True)
-        user = getUsers(2)
+        user = getUser(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
         instance.borrowedBy = user
@@ -187,7 +187,7 @@ class BookInstanceViewTests(LibraryTestCase):
 
     def test_userCannotMarkInstancesAsReturned(self):
         self.loggedIn = self.createUserAndLogin(1)
-        user = getUsers(2)
+        user = getUser(2)
         book = getBooks(1)
         instance = getBookInstances(1, book)
         instance.borrowedBy = user
@@ -205,7 +205,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_userCanSeeWhetherInstanceIsBorrowed(self):
         book = getBooks(1)
         instance1, instance2 = getBookInstances(2, book)
-        borrowingUser = getUsers(1)
+        borrowingUser = getUser(1)
         instance1.borrowedBy = borrowingUser
         instance1.save()
 
@@ -224,7 +224,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_adminCanSeeWhoBorrowedInstance(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
-        borrowingUser = getUsers(1)
+        borrowingUser = getUser(1)
         instance.borrowedBy = borrowingUser
         instance.save()
 
@@ -240,7 +240,7 @@ class BookInstanceViewTests(LibraryTestCase):
     def test_usersCannotSeeWhoBorrowedInstance(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
-        borrowingUser = getUsers(1)
+        borrowingUser = getUser(1)
         instance.borrowedBy = borrowingUser
         instance.save()
 

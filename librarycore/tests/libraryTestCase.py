@@ -10,7 +10,7 @@ class LibraryTestCase(TestCase):
         setup_test_environment()
 
     def createUserAndLogin(self, n, admin=False):
-        user = getUsers(n, admin)
+        user = getUser(n, admin)
         self.user = user
         loggedIn = self.client.login(username=f'testingUser{n}', password=f'testingPassword{n}')
         return loggedIn

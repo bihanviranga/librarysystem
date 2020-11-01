@@ -15,8 +15,8 @@ class GeneralSiteTests(TestCase):
         book1instances = getBookInstances(2, books[0])
         book2instances = getBookInstances(5, books[1])
         newAuthor = getAuthors(1)
-        user1 = getUsers(1)
-        user2 = getUsers(2)
+        user1 = getUser(1)
+        user2 = getUser(2)
         book1instances[0].borrowedBy = user1
         book1instances[0].save()
         book2instances[1].borrowedBy = user2

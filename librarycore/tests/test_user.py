@@ -51,7 +51,7 @@ class UserTests(LibraryTestCase):
     def test_userCannotSeeOtherUserBorrowedBooks(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
-        borrowingUser = getUsers(1)
+        borrowingUser = getUser(1)
         instance.borrowedBy = borrowingUser
         instance.save()
 
@@ -66,7 +66,7 @@ class UserTests(LibraryTestCase):
     def test_adminCanSeeUserBorrowedBooks(self):
         book = getBooks(1)
         instance = getBookInstances(1, book)
-        borrowingUser = getUsers(1)
+        borrowingUser = getUser(1)
         instance.borrowedBy = borrowingUser
         instance.save()
 

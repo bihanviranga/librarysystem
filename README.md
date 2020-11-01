@@ -26,7 +26,6 @@
 - [ ] Read/not read marked in each book.
 - [ ] Book instance types refactor into a seperate models (types can be hardcover, paperback, magazine, etc)
 - [ ] In books page, author is passed as a string (just the name). Cannot link to author page.
-- [ ] getUsers() in test helpers -- rename to getUser() ?
 
 ### Done
 - [X] Ratings for books, CRUD + Tests

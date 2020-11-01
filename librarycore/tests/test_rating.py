@@ -43,7 +43,7 @@ class RatingViewCrudTest(LibraryTestCase):
         self.assertEqual(rating.score, postDict['score'])
 
     def test_canUpdateOnlyOwnRatings(self):
-        user = getUsers(2)
+        user = getUser(2)
         book = getBooks(1)
         rating = models.BookRating.objects.create(book=book, user=user, score=1, comment="originalComment1")
 
@@ -80,7 +80,7 @@ class RatingViewCrudTest(LibraryTestCase):
 
     def test_adminCanDeleteOtherUserRatings(self):
         self.loggedIn = self.createUserAndLogin(1, True)
-        user = getUsers(2)
+        user = getUser(2)
         book = getBooks(1)
         rating = models.BookRating.objects.create(book=book, user=user, score=1, comment="testingComment1")
 
@@ -95,7 +95,7 @@ class RatingViewCrudTest(LibraryTestCase):
 
     def test_userCannotDeleteOtherUserRatings(self):
         self.loggedIn = self.createUserAndLogin(1)
-        user = getUsers(2)
+        user = getUser(2)
         book = getBooks(1)
         rating = models.BookRating.objects.create(book=book, user=user, score=1, comment="testingComment1")
 
@@ -110,7 +110,7 @@ class RatingViewCrudTest(LibraryTestCase):
 
     def test_bookDetailPageShowsRatings(self):
         book = getBooks(1)
-        user = getUsers(1)
+        user = getUser(1)
         r1 = models.BookRating.objects.create(book=book, user=user, score=1, comment="testingComment1")
         r2 = models.BookRating.objects.create(book=book, user=user, score=2, comment="testingComment2")
         r3 = models.BookRating.objects.create(book=book, user=user, score=3, comment="testingComment3")
