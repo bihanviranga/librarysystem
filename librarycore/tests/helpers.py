@@ -6,6 +6,20 @@ from librarycore import models
 
 # TODO: getBooks with author or without author? add parameter.
 def getBooks(count):
+    """
+    Returns given number of Book objects.
+
+    The returned Book objects will have a bookName of testingBook1, testingBook2, and so on.
+    An author will be created for each book as testingAuthor1, testingAuthor2, and so on.
+    The bookDescription field will be blank.
+
+    Parameters:
+        count: the number of Book objects to create.
+
+    Returns:
+        If count is 1, returns a single object.
+        Otherwise returns an array of Book objects.
+    """
     books = []
     for i in range(count):
         bookName = f'testingBook{i}'
@@ -18,6 +32,19 @@ def getBooks(count):
         return books
 
 def getBookInstances(count, book):
+    """
+    Returns given number of BookInstance objects.
+
+    Created BookInstance objects will have a randomly created instanceType.
+
+    Parameters:
+        count: the number of BookInstance objects to create.
+        book: the Book object that should be used as the instanceBook field.
+
+    Returns:
+        If count is 1, returns a single object.
+        Otherwise returns an array of BookInstance objects.
+    """
     bookInstances = []
     for i in range(count):
         instanceBook = book
@@ -30,6 +57,21 @@ def getBookInstances(count, book):
         return bookInstances
 
 def getUsers(n, admin=False):
+    """
+    Return a User object.
+
+    When n=1, the created User object will have the following attributes:
+        Username: testingUser1
+        Password: testingPassword1
+        Email: testingUser1@email.com
+
+    Parameters:
+        n: The number of User objects to create.
+        admin: Whether the User should be added to the library_admins group.
+
+    Returns:
+        A single User object.
+    """
     user = User.objects.create_user(f'testingUser{n}', f'testingUser{n}@email.com', f'testingPassword{n}')
     if admin:
         group = Group.objects.get_or_create(name='library_admins')[0]
@@ -37,6 +79,18 @@ def getUsers(n, admin=False):
     return user
 
 def getAuthors(n):
+    """
+    Returns a given number of Author objects.
+
+    Each Author object will have a name of testingAuthor1, testingAuthor2, and so on.
+
+    Parameters:
+        n: The number of Author objects to create.
+
+    Returns:
+        If count is 1, returns a single object.
+        Otherwise returns an array of Author objects.
+    """
     authors = []
     for i in range(n):
         author = models.Author.objects.create(authorName=f'testingAuthor{i}')
